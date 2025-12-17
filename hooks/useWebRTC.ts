@@ -3,6 +3,7 @@ import { Player, RTCSignalData } from '../types';
 import {
     requestMediaDevices,
     getLocalStream,
+    setLocalStream as setWebRTCLocalStream,
     stopLocalStream,
     setLocalAudioEnabled,
     setLocalVideoEnabled,
@@ -89,6 +90,8 @@ export function useWebRTC({
 
         try {
             setError(null);
+            // Register stream with webrtc service module so peer connections can use it
+            setWebRTCLocalStream(stream);
             setLocalStream(stream);
             setIsInitialized(true);
 

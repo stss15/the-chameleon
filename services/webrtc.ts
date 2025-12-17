@@ -49,6 +49,15 @@ export function getLocalStream(): MediaStream | null {
 }
 
 /**
+ * Set the local media stream (when acquired externally, e.g. from click handler)
+ */
+export function setLocalStream(stream: MediaStream): void {
+    localStream = stream;
+    console.log('Local stream set in webrtc service, tracks:', stream.getTracks().map(t => t.kind));
+}
+
+
+/**
  * Stop the local media stream
  */
 export function stopLocalStream(): void {
