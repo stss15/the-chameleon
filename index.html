@@ -3,7 +3,10 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <title>The Chameleon</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -27,9 +30,35 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Merriweather:wght@700&display=swap"
     rel="stylesheet">
   <style>
+    /* Mobile viewport height fix */
+    :root {
+      --vh: 1vh;
+    }
+
+    html,
+    body {
+      height: 100%;
+      height: -webkit-fill-available;
+    }
+
     body {
       background-color: #1A2F2F;
       color: white;
+      min-height: 100vh;
+      min-height: calc(var(--vh, 1vh) * 100);
+      min-height: -webkit-fill-available;
+      overflow-x: hidden;
+    }
+
+    #root {
+      min-height: 100vh;
+      min-height: calc(var(--vh, 1vh) * 100);
+      min-height: -webkit-fill-available;
+    }
+
+    /* Safe area insets for iPhone notch/home indicator */
+    .safe-area-inset-bottom {
+      padding-bottom: max(1rem, env(safe-area-inset-bottom));
     }
 
     .perspective-1000 {
@@ -224,12 +253,21 @@
   }
 }
 </script>
-  <link rel="stylesheet" href="/index.css">
 </head>
 
 <body>
   <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
+  <script>
+    // Fix for mobile viewport height (iOS Safari address bar)
+    function setVH() {
+      let vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', vh + 'px');
+    }
+    setVH();
+    window.addEventListener('resize', setVH);
+    window.addEventListener('orientationchange', setVH);
+  </script>
 </body>
 
 </html>

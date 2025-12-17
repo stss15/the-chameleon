@@ -77,6 +77,49 @@ const App: React.FC = () => {
     }
   }, []);
 
+  // Restore session from localStorage on mount
+  useEffect(() => {
+    if (!isFirebaseReady) return;
+
+    const savedSession = localStorage.getItem('chameleon_session');
+    if (savedSession) {
+      try {
+        const session = JSON.parse(savedSession);
+        if (session.roomCode && session.playerId && session.playerName) {
+          console.log("Restoring session:", session.roomCode);
+          setRoomCode(session.roomCode);
+          setPlayerId(session.playerId);
+          setPlayerNameState(session.playerName);
+          setSelectedCharacterId(session.characterId || 'char1');
+          setIsHost(session.isHost || false);
+          setHasEnteredName(true);
+          setScreen('WAITING_ROOM');
+        }
+      } catch (e) {
+        console.error("Failed to restore session:", e);
+        localStorage.removeItem('chameleon_session');
+      }
+    }
+  }, [isFirebaseReady]);
+
+  // Save session to localStorage when it changes
+  const saveSession = (code: string, pId: string, name: string, charId: string, host: boolean) => {
+    localStorage.setItem('chameleon_session', JSON.stringify({
+      roomCode: code,
+      playerId: pId,
+      playerName: name,
+      characterId: charId,
+      isHost: host,
+      timestamp: Date.now()
+    }));
+  };
+
+  // Clear session (on leave or game end)
+  const clearSession = () => {
+    localStorage.removeItem('chameleon_session');
+  };
+
+
   // Subscribe to room updates
   useEffect(() => {
     if (roomCode && isFirebaseReady) {
@@ -132,6 +175,8 @@ const App: React.FC = () => {
       const char = getCharacterById(selectedCharacterId);
       await setPlayerName(roomCode, playerId, playerName.trim(), char.style, char.seed, isHost);
       setHasEnteredName(true);
+      // Save session for reconnection on refresh
+      saveSession(roomCode, playerId, playerName.trim(), selectedCharacterId, isHost);
     } catch (e: any) {
       setError(e.message);
     }
@@ -315,8 +360,15 @@ const App: React.FC = () => {
               {!isVideoEnabled ? (
                 <button
                   onClick={async () => {
-                    setIsVideoEnabled(true);
-                    await initializeMedia();
+                    try {
+                      // Call getUserMedia directly in click handler for browser trust
+                      await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                      setIsVideoEnabled(true);
+                      await initializeMedia();
+                    } catch (err) {
+                      console.error("Camera permission denied:", err);
+                      setError("Camera/microphone access denied");
+                    }
                   }}
                   className="mt-4 bg-blue-600 hover:bg-blue-500 text-white py-2 px-4 rounded-lg font-medium text-sm transition flex items-center gap-2 mx-auto"
                 >
