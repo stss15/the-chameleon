@@ -1,0 +1,5 @@
+{
+  "name": "The Chameleon",
+  "description": "A real-time multiplayer social deduction game where players try to catch the impostor. Features Firebase synchronization and Gemini-powered topic generation.",
+  "requestFramePermissions": []
+}
