@@ -9,11 +9,14 @@ interface SideMenuProps {
     isOpen: boolean;
     onClose: () => void;
     players: Record<string, Player>;
+    isHost: boolean;
+    onLeave: () => void;
+    onEndGame: () => void;
 }
 
 type TabType = 'leaderboard' | 'clues';
 
-export const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose, players }) => {
+export const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose, players, isHost, onLeave, onEndGame }) => {
     const [activeTab, setActiveTab] = useState<TabType>('leaderboard');
 
     const playerList: Player[] = Object.values(players) as Player[];
@@ -31,7 +34,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose, players }) 
             )}
 
             {/* Drawer */}
-            <div className={`fixed top-0 right-0 h-full w-[85%] max-w-sm bg-feltDark border-l border-white/20 z-50 transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : 'translate-x-full'
+            <div className={`fixed top-0 right-0 h-full w-[85%] max-w-sm bg-feltDark border-l border-white/20 z-50 transform transition-transform duration-300 flex flex-col ${isOpen ? 'translate-x-0' : 'translate-x-full'
                 }`}>
                 {/* Header */}
                 <div className="flex items-center justify-between p-4 border-b border-white/10">
@@ -67,7 +70,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose, players }) 
                 </div>
 
                 {/* Content */}
-                <div className="p-4 overflow-y-auto" style={{ height: 'calc(100% - 120px)' }}>
+                <div className="p-4 overflow-y-auto flex-1">
                     {activeTab === 'leaderboard' && (
                         <div className="space-y-2">
                             {sortedByScore.map((player, idx) => (
@@ -118,6 +121,25 @@ export const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose, players }) 
                                 ))
                             )}
                         </div>
+                    )}
+                </div>
+
+                {/* Leave/End Game Buttons */}
+                <div className="p-4 border-t border-white/10 space-y-2">
+                    {isHost ? (
+                        <button
+                            onClick={onEndGame}
+                            className="w-full bg-red-600 hover:bg-red-500 text-white py-3 rounded-lg font-bold transition"
+                        >
+                            🛑 End Game (All Players)
+                        </button>
+                    ) : (
+                        <button
+                            onClick={onLeave}
+                            className="w-full bg-orange-600 hover:bg-orange-500 text-white py-3 rounded-lg font-bold transition"
+                        >
+                            🚪 Leave Game
+                        </button>
                     )}
                 </div>
             </div>

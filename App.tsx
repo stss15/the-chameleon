@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { GameState, Player, TopicCard } from './types';
-import { initFirebase, createRoom, joinRoom, setPlayerName, subscribeToRoom, startGame, submitClue, submitVote, submitChameleonGuess, resetGame, continueAfterElimination, sendChatMessage } from './services/firebase';
+import { initFirebase, createRoom, joinRoom, setPlayerName, subscribeToRoom, startGame, submitClue, submitVote, submitChameleonGuess, resetGame, continueAfterElimination, sendChatMessage, endRoom, leaveRoom } from './services/firebase';
 import { generateTopic } from './services/gemini';
 import { DEFAULT_TOPICS } from './constants';
 import { Card, TopicGrid } from './components/Card';
@@ -125,6 +125,19 @@ const App: React.FC = () => {
   useEffect(() => {
     if (roomCode && isFirebaseReady) {
       const unsub = subscribeToRoom(roomCode, (state) => {
+        // Handle room ended by host
+        if (state === null || state.phase === 'ENDED') {
+          clearSession();
+          cleanupVideo();
+          setScreen('HOME');
+          setRoomCode('');
+          setPlayerId('');
+          setGameState(null);
+          setHasEnteredName(false);
+          setIsHost(false);
+          return;
+        }
+
         setGameState(state);
         // Auto-transition to game when game starts
         if (state.phase !== 'LOBBY') {
@@ -207,6 +220,45 @@ const App: React.FC = () => {
 
       await startGame(roomCode, topic);
     } catch (e: any) {
+      setError(e.message);
+    }
+  };
+
+  // Handle host ending the game
+  const handleEndGame = async () => {
+    if (!roomCode || !isHost) return;
+
+    try {
+      await endRoom(roomCode);
+      clearSession();
+      cleanupVideo();
+      setScreen('HOME');
+      setRoomCode('');
+      setPlayerId('');
+      setGameState(null);
+      setHasEnteredName(false);
+    } catch (e: any) {
+      console.error('Failed to end game:', e);
+      setError(e.message);
+    }
+  };
+
+  // Handle player leaving the game
+  const handleLeaveGame = async () => {
+    if (!roomCode || !playerId) return;
+
+    try {
+      await leaveRoom(roomCode, playerId);
+      clearSession();
+      cleanupVideo();
+      setScreen('HOME');
+      setRoomCode('');
+      setPlayerId('');
+      setGameState(null);
+      setHasEnteredName(false);
+      setIsHost(false);
+    } catch (e: any) {
+      console.error('Failed to leave game:', e);
       setError(e.message);
     }
   };
@@ -493,6 +545,9 @@ const App: React.FC = () => {
         isOpen={isSideMenuOpen}
         onClose={() => setIsSideMenuOpen(false)}
         players={gameState.players}
+        isHost={isHost}
+        onLeave={handleLeaveGame}
+        onEndGame={handleEndGame}
       />
 
       {/* Side Menu Toggle Button */}

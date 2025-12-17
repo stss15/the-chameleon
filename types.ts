@@ -41,7 +41,8 @@ export type GamePhase =
   | 'VOTING'
   | 'ELIMINATION' // New: showing who was eliminated
   | 'GUESSING' // Chameleon guesses the word
-  | 'GAME_OVER';
+  | 'GAME_OVER'
+  | 'ENDED'; // Host ended the session
 
 export interface GameState {
   roomId: string;

@@ -478,6 +478,47 @@ export const clearSignals = async (roomId: string): Promise<void> => {
   await remove(ref(db, `rooms/${roomId}/signals`));
 };
 
+/**
+ * End the room completely (host only) - removes the entire room
+ */
+export const endRoom = async (roomId: string): Promise<void> => {
+  if (!db) return;
+
+  // First update phase to 'ENDED' so all clients know
+  await update(ref(db, `rooms/${roomId}`), {
+    phase: 'ENDED'
+  });
+
+  // Then remove the room after a short delay to let clients react
+  setTimeout(async () => {
+    await remove(ref(db, `rooms/${roomId}`));
+  }, 2000);
+};
+
+/**
+ * Remove a player from the room (for leaving)
+ */
+export const leaveRoom = async (roomId: string, playerId: string): Promise<void> => {
+  if (!db) return;
+
+  // Remove player from room
+  await remove(ref(db, `rooms/${roomId}/players/${playerId}`));
+
+  // Remove from turn order if exists
+  const roomRef = ref(db, `rooms/${roomId}`);
+  const snapshot = await get(roomRef);
+  if (snapshot.exists()) {
+    const room = snapshot.val();
+    if (room.turnOrder) {
+      const newTurnOrder = room.turnOrder.filter((id: string) => id !== playerId);
+      await update(roomRef, { turnOrder: newTurnOrder });
+    }
+  }
+
+  // Clear their signals
+  await remove(ref(db, `rooms/${roomId}/signals/${playerId}`));
+};
+
 function shuffleArray(array: string[]) {
   const newArr = [...array];
   for (let i = newArr.length - 1; i > 0; i--) {
