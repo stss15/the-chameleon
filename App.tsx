@@ -56,6 +56,7 @@ const App: React.FC = () => {
     isInitialized: isVideoInitialized,
     error: videoError,
     initializeMedia,
+    initializeWithStream,
     toggleCamera,
     toggleMic,
     cleanup: cleanupVideo,
@@ -362,9 +363,13 @@ const App: React.FC = () => {
                   onClick={async () => {
                     try {
                       // Call getUserMedia directly in click handler for browser trust
-                      await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                      // Then pass the stream to our hook instead of discarding it
+                      const stream = await navigator.mediaDevices.getUserMedia({
+                        video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' },
+                        audio: { echoCancellation: true, noiseSuppression: true }
+                      });
                       setIsVideoEnabled(true);
-                      await initializeMedia();
+                      await initializeWithStream(stream);
                     } catch (err) {
                       console.error("Camera permission denied:", err);
                       setError("Camera/microphone access denied");

@@ -36,6 +36,7 @@ interface UseWebRTCReturn {
     isInitialized: boolean;
     error: string | null;
     initializeMedia: () => Promise<void>;
+    initializeWithStream: (stream: MediaStream) => Promise<void>;
     toggleCamera: () => void;
     toggleMic: () => void;
     cleanup: () => void;
@@ -81,6 +82,29 @@ export function useWebRTC({
             setIsInitialized(true); // Still mark as initialized, just without stream
         }
     }, [roomCode, playerId, isEnabled, isInitialized]);
+
+    // Initialize with an existing stream (bypasses guards for direct click handlers)
+    const initializeWithStream = useCallback(async (stream: MediaStream) => {
+        if (isInitialized) return;
+
+        try {
+            setError(null);
+            setLocalStream(stream);
+            setIsInitialized(true);
+
+            // Update media state in Firebase
+            if (roomCode && playerId) {
+                await updateMediaState(roomCode, playerId, {
+                    isCameraOn: true,
+                    isMicOn: true,
+                });
+            }
+            console.log('WebRTC initialized with existing stream');
+        } catch (err) {
+            console.error('Failed to initialize with stream:', err);
+            setError('Failed to initialize video');
+        }
+    }, [roomCode, playerId, isInitialized]);
 
     // Toggle camera
     const toggleCamera = useCallback(() => {
@@ -232,6 +256,7 @@ export function useWebRTC({
         isInitialized,
         error,
         initializeMedia,
+        initializeWithStream,
         toggleCamera,
         toggleMic,
         cleanup,
