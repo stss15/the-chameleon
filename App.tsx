@@ -575,6 +575,20 @@ const App: React.FC = () => {
         <GameTutorial onComplete={() => setShowTutorial(false)} />
       )}
 
+      {/* Hidden audio elements for WebRTC voice chat */}
+      {Array.from(remoteStreams.entries()).map(([peerId, stream]) => (
+        <audio
+          key={peerId}
+          autoPlay
+          playsInline
+          ref={(audio) => {
+            if (audio && audio.srcObject !== stream) {
+              audio.srcObject = stream;
+            }
+          }}
+        />
+      ))}
+
       {/* Clue Modal - shows when other players submit clues */}
       {shownClue && (
         <ClueModal
