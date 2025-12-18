@@ -1,9 +1,10 @@
 import React from 'react';
 import { Player } from '../types';
+import { getCharacterUrl } from './CharacterPicker';
 
-// Helper for avatars
-const getAvatarUrl = (seed: string, style: string = 'adventurer') =>
-    `https://api.dicebear.com/7.x/${style}/svg?seed=${encodeURIComponent(seed)}`;
+// Helper for avatars - uses local character images
+const getAvatarUrl = (seed: string, style: string = 'gentleman') =>
+    getCharacterUrl(style, seed);
 
 interface ClueModalProps {
     player: Player;

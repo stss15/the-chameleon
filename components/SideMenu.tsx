@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Player } from '../types';
+import { getCharacterUrl } from './CharacterPicker';
 
-// Helper for avatars
-const getAvatarUrl = (seed: string, style: string = 'adventurer') =>
-    `https://api.dicebear.com/7.x/${style}/svg?seed=${encodeURIComponent(seed)}`;
+// Helper for avatars - uses local character images
+const getAvatarUrl = (seed: string, style: string = 'gentleman') =>
+    getCharacterUrl(style, seed);
 
 interface SideMenuProps {
     isOpen: boolean;
@@ -35,27 +36,27 @@ export const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose, players, is
                 />
             )}
 
-            {/* Drawer */}
-            <div className={`fixed top-0 right-0 h-full w-[85%] max-w-sm bg-feltDark border-l border-white/20 z-50 transform transition-transform duration-300 flex flex-col ${isOpen ? 'translate-x-0' : 'translate-x-full'
+            {/* Drawer - parchment background for readability */}
+            <div className={`fixed top-0 right-0 h-full w-[85%] max-w-sm bg-parchment border-l-4 border-brass z-50 transform transition-transform duration-300 flex flex-col ${isOpen ? 'translate-x-0' : 'translate-x-full'
                 }`}>
                 {/* Header */}
-                <div className="flex items-center justify-between p-4 border-b border-white/10">
-                    <h2 className="text-lg font-bold text-gold">📋 Game Info</h2>
+                <div className="flex items-center justify-between p-4 border-b border-brass/30 bg-loungeDark">
+                    <h2 className="text-lg font-bold text-antiqueGold font-serif">📋 Game Info</h2>
                     <button
                         onClick={onClose}
-                        className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white"
+                        className="w-8 h-8 flex items-center justify-center rounded-full bg-white/20 text-white hover:bg-white/30"
                     >
                         ✕
                     </button>
                 </div>
 
                 {/* Tabs */}
-                <div className="flex border-b border-white/10">
+                <div className="flex border-b border-brass/30 bg-loungeDark">
                     <button
                         onClick={() => setActiveTab('leaderboard')}
                         className={`flex-1 py-3 text-sm font-bold transition ${activeTab === 'leaderboard'
-                            ? 'text-gold border-b-2 border-gold'
-                            : 'text-white/50'
+                            ? 'text-antiqueGold border-b-2 border-antiqueGold'
+                            : 'text-parchment/50'
                             }`}
                     >
                         🏆 Leaderboard
@@ -63,8 +64,8 @@ export const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose, players, is
                     <button
                         onClick={() => setActiveTab('clues')}
                         className={`flex-1 py-3 text-sm font-bold transition ${activeTab === 'clues'
-                            ? 'text-gold border-b-2 border-gold'
-                            : 'text-white/50'
+                            ? 'text-antiqueGold border-b-2 border-antiqueGold'
+                            : 'text-parchment/50'
                             }`}
                     >
                         💬 Clues
@@ -78,23 +79,23 @@ export const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose, players, is
                             {sortedByScore.map((player, idx) => (
                                 <div
                                     key={player.id}
-                                    className={`flex items-center gap-3 p-3 rounded-lg ${player.isEliminated ? 'bg-gray-900/50 opacity-50' : 'bg-white/5'
+                                    className={`flex items-center gap-3 p-3 rounded-lg ${player.isEliminated ? 'bg-loungeDark/20 opacity-50' : 'bg-loungeDark/10'
                                         }`}
                                 >
-                                    <span className="text-2xl font-bold text-gold w-8">#{idx + 1}</span>
+                                    <span className="text-2xl font-bold text-rust w-8">#{idx + 1}</span>
                                     <img
                                         src={getAvatarUrl(player.avatarSeed, player.characterStyle)}
-                                        className={`w-10 h-10 rounded-full bg-white ${player.isEliminated ? 'grayscale' : ''}`}
+                                        className={`w-10 h-10 rounded-full bg-white border-2 border-brass ${player.isEliminated ? 'grayscale' : ''}`}
                                     />
                                     <div className="flex-1">
-                                        <p className={`font-bold ${player.isEliminated ? 'line-through' : ''}`}>
+                                        <p className={`font-bold text-loungeDark ${player.isEliminated ? 'line-through' : ''}`}>
                                             {player.name}
                                         </p>
                                         {player.isEliminated && (
-                                            <span className="text-xs text-red-400">Eliminated</span>
+                                            <span className="text-xs text-red-600">Eliminated</span>
                                         )}
                                     </div>
-                                    <span className="text-xl font-bold text-gold">{player.score || 0}</span>
+                                    <span className="text-xl font-bold text-rust">{player.score || 0}</span>
                                     {/* Kick button - host only, can't kick self */}
                                     {isHost && player.id !== currentPlayerId && (
                                         <button
@@ -113,21 +114,21 @@ export const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose, players, is
                     {activeTab === 'clues' && (
                         <div className="space-y-2">
                             {playersWithClues.length === 0 ? (
-                                <p className="text-white/50 text-center py-8">No clues yet...</p>
+                                <p className="text-loungeDark/50 text-center py-8">No clues yet...</p>
                             ) : (
                                 playersWithClues.map(player => (
                                     <div
                                         key={player.id}
-                                        className={`flex items-center gap-3 p-3 rounded-lg bg-white/5 ${player.isEliminated ? 'opacity-50' : ''
+                                        className={`flex items-center gap-3 p-3 rounded-lg bg-loungeDark/10 ${player.isEliminated ? 'opacity-50' : ''
                                             }`}
                                     >
                                         <img
                                             src={getAvatarUrl(player.avatarSeed, player.characterStyle)}
-                                            className="w-8 h-8 rounded-full bg-white"
+                                            className="w-8 h-8 rounded-full bg-white border-2 border-brass"
                                         />
                                         <div className="flex-1">
-                                            <p className="font-bold text-sm">{player.name}</p>
-                                            <p className="text-gold text-lg">"{player.clue}"</p>
+                                            <p className="font-bold text-sm text-loungeDark">{player.name}</p>
+                                            <p className="text-rust text-lg">"{player.clue}"</p>
                                         </div>
                                     </div>
                                 ))
@@ -137,7 +138,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose, players, is
                 </div>
 
                 {/* Leave/End Game Buttons */}
-                <div className="p-4 border-t border-white/10 space-y-2">
+                <div className="p-4 border-t border-brass/30 bg-loungeDark space-y-2">
                     {isHost ? (
                         <button
                             onClick={onEndGame}
@@ -163,7 +164,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose, players, is
 export const SideMenuToggle: React.FC<{ onClick: () => void }> = ({ onClick }) => (
     <button
         onClick={onClick}
-        className="fixed right-0 top-1/2 -translate-y-1/2 bg-gold text-feltDark px-2 py-4 rounded-l-lg font-bold text-xs z-30 shadow-lg"
+        className="fixed right-0 top-1/2 -translate-y-1/2 bg-red-700 hover:bg-red-600 text-white px-2 py-4 rounded-l-lg font-bold text-xs z-30 shadow-lg border-l-2 border-t-2 border-b-2 border-red-900"
         style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
     >
         📋 INFO
