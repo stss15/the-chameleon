@@ -535,8 +535,10 @@ const App: React.FC = () => {
         onClose={() => setIsSideMenuOpen(false)}
         players={gameState.players}
         isHost={isHost}
+        currentPlayerId={playerId}
         onLeave={handleLeaveGame}
         onEndGame={handleEndGame}
+        onKickPlayer={(kickPlayerId) => leaveRoom(roomCode, kickPlayerId)}
       />
 
       {/* Side Menu Toggle Button */}
@@ -845,8 +847,8 @@ const App: React.FC = () => {
         </div>
       )}
 
-      {/* Live Chat - Collapsible at bottom during gameplay */}
-      {(gameState.phase === 'CLUES' || gameState.phase === 'VOTING') && (
+      {/* Live Chat - Collapsible at bottom during gameplay (hidden when entering clue) */}
+      {((gameState.phase === 'CLUES' && !isMyTurn) || gameState.phase === 'VOTING') && (
         <LiveChat
           messages={gameState.messages}
           currentPlayerId={playerId}

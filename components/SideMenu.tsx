@@ -10,13 +10,15 @@ interface SideMenuProps {
     onClose: () => void;
     players: Record<string, Player>;
     isHost: boolean;
+    currentPlayerId: string;
     onLeave: () => void;
     onEndGame: () => void;
+    onKickPlayer: (playerId: string) => void;
 }
 
 type TabType = 'leaderboard' | 'clues';
 
-export const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose, players, isHost, onLeave, onEndGame }) => {
+export const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose, players, isHost, currentPlayerId, onLeave, onEndGame, onKickPlayer }) => {
     const [activeTab, setActiveTab] = useState<TabType>('leaderboard');
 
     const playerList: Player[] = Object.values(players) as Player[];
@@ -93,6 +95,16 @@ export const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose, players, is
                                         )}
                                     </div>
                                     <span className="text-xl font-bold text-gold">{player.score || 0}</span>
+                                    {/* Kick button - host only, can't kick self */}
+                                    {isHost && player.id !== currentPlayerId && (
+                                        <button
+                                            onClick={() => onKickPlayer(player.id)}
+                                            className="w-7 h-7 rounded-full bg-red-600/50 hover:bg-red-600 flex items-center justify-center text-white text-xs transition ml-2"
+                                            title="Remove player"
+                                        >
+                                            ✕
+                                        </button>
+                                    )}
                                 </div>
                             ))}
                         </div>
