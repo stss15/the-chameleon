@@ -339,51 +339,58 @@ const App: React.FC = () => {
     );
   }
 
-  // HOME SCREEN - Cigar Lounge Game Show Style!
+  // HOME SCREEN - Rusty Lake Cigar Lounge Style
   if (screen === 'HOME') {
     return (
-      <div className="min-h-screen bg-felt flex flex-col items-center justify-center p-4 bg-texture relative">
+      <div className="min-h-screen bg-lounge flex flex-col items-center justify-center p-4 bg-texture relative vignette">
+        {/* Ornate frame border */}
+        <div className="absolute inset-4 border border-brass/30 rounded-lg pointer-events-none" />
+
         {/* Presents text */}
-        <p className="text-white/50 text-xs uppercase tracking-[0.4em] mb-2">
+        <p className="text-parchment/50 text-xs uppercase tracking-[0.4em] mb-3 font-serif">
           Steven Stewart presents
         </p>
 
-        {/* Main title */}
-        <h1 className="text-5xl md:text-6xl font-serif font-black text-gold mb-2 drop-shadow-lg text-center" style={{ textShadow: '0 0 20px rgba(255,200,0,0.3)' }}>
+        {/* Main title - vintage display font */}
+        <h1 className="text-5xl md:text-6xl font-display font-black text-antiqueGold mb-2 drop-shadow-lg text-center tracking-tight" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.8), 0 0 30px rgba(184,134,11,0.3)' }}>
           THE CHAMELEON
         </h1>
 
-        {/* Chameleon emoji */}
-        <div className="text-6xl mb-4">
-          🦎
+        {/* Ornate divider */}
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-12 h-px bg-gradient-to-r from-transparent via-brass to-transparent" />
+          <span className="text-3xl">🦎</span>
+          <div className="w-12 h-px bg-gradient-to-r from-transparent via-brass to-transparent" />
         </div>
 
         {/* Tagline */}
-        <p className="text-white/60 text-sm italic mb-8 text-center max-w-xs">
+        <p className="text-parchment/60 text-sm italic mb-10 text-center max-w-xs font-serif">
           "Can you spot the imposter... or are you the one blending in?"
         </p>
 
-        {/* Buttons */}
+        {/* Vintage brass buttons */}
         <div className="space-y-4 w-full max-w-xs">
-          {error && <div className="bg-red-500/20 text-red-200 p-3 rounded-lg text-center text-sm border border-red-500/30">{error}</div>}
+          {error && <div className="bg-red-900/30 text-red-200 p-3 rounded-lg text-center text-sm border border-red-800/50">{error}</div>}
 
           <button
             onClick={handleCreateRoom}
-            className="w-full bg-gold text-feltDark py-4 rounded-xl font-bold text-xl hover:bg-yellow-400 transition shadow-lg uppercase tracking-wide"
+            className="w-full bg-gradient-to-b from-antiqueGold to-brass text-loungeDark py-4 rounded-lg font-bold text-xl hover:from-yellow-600 hover:to-brass transition shadow-lg uppercase tracking-wide font-serif border border-brass/50"
+            style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.2)' }}
           >
             🎬 Host a Game
           </button>
 
           <button
             onClick={() => { setScreen('JOIN_CODE'); setError(''); }}
-            className="w-full bg-white/10 text-white py-4 rounded-xl font-bold text-xl hover:bg-white/20 transition border border-white/20 uppercase tracking-wide"
+            className="w-full bg-shadow/50 text-parchment py-4 rounded-lg font-bold text-xl hover:bg-shadow/70 transition border border-brass/30 uppercase tracking-wide font-serif"
+            style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.4)' }}
           >
             🎟️ Join a Game
           </button>
         </div>
 
         {/* Footer */}
-        <p className="absolute bottom-6 text-white/30 text-xs">
+        <p className="absolute bottom-6 text-parchment/30 text-xs font-serif">
           A party game for 3-10 players
         </p>
       </div>
@@ -393,18 +400,18 @@ const App: React.FC = () => {
   // JOIN CODE SCREEN
   if (screen === 'JOIN_CODE') {
     return (
-      <div className="min-h-screen bg-felt flex flex-col items-center justify-center p-4 bg-texture">
-        <h1 className="text-4xl font-serif font-bold text-gold mb-8">Join Game</h1>
+      <div className="min-h-screen bg-lounge flex flex-col items-center justify-center p-4 bg-texture vignette">
+        <h1 className="text-4xl font-display font-bold text-antiqueGold mb-8">Join Game</h1>
 
-        <div className="bg-white/10 p-6 rounded-xl w-full max-w-xs space-y-4 border border-white/20">
-          {error && <div className="bg-red-500/20 text-red-200 p-2 rounded text-center text-sm">{error}</div>}
+        <div className="bg-shadow/50 p-6 rounded-lg w-full max-w-xs space-y-4 border border-brass/30">
+          {error && <div className="bg-red-900/30 text-red-200 p-2 rounded text-center text-sm">{error}</div>}
 
           <div>
-            <label className="block text-sm text-white/70 mb-2">Enter Room Code</label>
+            <label className="block text-sm text-parchment/70 mb-2 font-serif">Enter Room Code</label>
             <input
               value={joinCodeInput}
               onChange={e => setJoinCodeInput(e.target.value.toUpperCase())}
-              className="w-full text-3xl font-mono tracking-[0.3em] text-center p-4 rounded-lg bg-white text-gray-900 uppercase"
+              className="w-full text-3xl font-mono tracking-[0.3em] text-center p-4 rounded-lg bg-parchment text-loungeDark uppercase border-2 border-brass"
               placeholder="ABC12"
               maxLength={5}
               autoFocus
@@ -413,14 +420,14 @@ const App: React.FC = () => {
 
           <button
             onClick={handleJoinRoom}
-            className="w-full bg-gold text-feltDark py-3 rounded-lg font-bold text-lg hover:bg-yellow-400 transition"
+            className="w-full bg-gradient-to-b from-antiqueGold to-brass text-loungeDark py-3 rounded-lg font-bold text-lg hover:from-yellow-600 hover:to-brass transition font-serif"
           >
             Join
           </button>
 
           <button
             onClick={() => { setScreen('HOME'); setError(''); }}
-            className="w-full text-white/50 text-sm hover:text-white transition"
+            className="w-full text-parchment/50 text-sm hover:text-parchment transition font-serif"
           >
             ← Back
           </button>
@@ -589,10 +596,10 @@ const App: React.FC = () => {
   const isMyTurn = gameState.turnOrder?.length > 0 && gameState.turnOrder[gameState.currentTurnIndex] === playerId;
 
   // ============================================
-  // MOBILE-FIRST GAME SCREEN
+  // MOBILE-FIRST GAME SCREEN - Rusty Lake Style
   // ============================================
   return (
-    <div className="min-h-screen bg-felt text-white font-sans bg-texture flex flex-col">
+    <div className="min-h-screen bg-lounge text-parchment font-sans bg-texture flex flex-col vignette">
 
       {/* Tutorial Overlay - shows when game first starts */}
       {showTutorial && gameState.phase !== 'LOBBY' && (
@@ -639,11 +646,11 @@ const App: React.FC = () => {
         <SideMenuToggle onClick={() => setIsSideMenuOpen(true)} />
       )}
 
-      {/* Compact Header */}
-      <header className="flex justify-between items-center p-3 bg-black/30 border-b border-white/10">
+      {/* Compact Header - Rusty Lake Style */}
+      <header className="flex justify-between items-center p-3 bg-loungeDark/80 border-b border-brass/30">
         <div className="flex items-center gap-2">
-          <span className="text-gold text-xs font-bold">ROOM</span>
-          <span className="font-mono text-lg text-white tracking-wider">{roomCode}</span>
+          <span className="text-antiqueGold text-xs font-bold font-serif">ROOM</span>
+          <span className="font-mono text-lg text-parchment tracking-wider">{roomCode}</span>
         </div>
         <div className="flex items-center gap-3">
           {/* Mic Toggle Button */}
