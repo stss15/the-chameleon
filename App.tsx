@@ -443,8 +443,8 @@ const App: React.FC = () => {
     const takenCharacterIds = players.map((p: Player) => p.characterStyle || p.avatarSeed).filter(Boolean);
 
     return (
-      <div className="min-h-screen bg-lounge flex flex-col items-center p-4 bg-texture overflow-y-auto">
-        <div className="bg-shadow/50 p-4 rounded-lg w-full max-w-md border border-brass/30 my-auto">
+      <div className="min-h-screen bg-lounge flex flex-col items-center p-4 bg-texture overflow-y-auto pb-20">
+        <div className="bg-shadow/50 p-4 rounded-lg w-full max-w-md border border-brass/30 mt-4 mb-8">
           {/* Room Code Display */}
           <div className="text-center mb-6">
             <p className="text-white/50 text-sm mb-1">Room Code</p>
