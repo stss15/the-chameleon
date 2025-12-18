@@ -14,20 +14,27 @@
       theme: {
         extend: {
           colors: {
-            felt: '#2F4F4F',
-            feltDark: '#1A2F2F',
-            card: '#FDF5E6',
-            gold: '#D4AF37',
+            // Rusty Lake inspired sepia palette
+            lounge: '#2C1810',      // Deep brown background
+            loungeDark: '#1A0F0A',  // Darker brown
+            parchment: '#D4C5A9',   // Aged paper
+            parchmentDark: '#B8A888', // Darker parchment
+            antiqueGold: '#B8860B', // Antique gold
+            brass: '#8B6914',       // Brass accents
+            rust: '#8B4513',        // Rusty brown
+            shadow: '#3D2B1F',      // Shadow brown
           },
           fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-            serif: ['Merriweather', 'serif'],
+            sans: ['Crimson Text', 'Georgia', 'serif'],
+            serif: ['Playfair Display', 'Georgia', 'serif'],
+            display: ['Playfair Display', 'Georgia', 'serif'],
           }
         }
       }
     }
   </script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Merriweather:wght@700&display=swap"
+  <link
+    href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Playfair+Display:wght@400;600;700;900&display=swap"
     rel="stylesheet">
   <style>
     /* Mobile viewport height fix */
@@ -46,8 +53,8 @@
     }
 
     body {
-      background-color: #1A2F2F;
-      color: white;
+      background-color: #1A0F0A;
+      color: #D4C5A9;
     }
 
     #root {
@@ -78,35 +85,43 @@
       backface-visibility: hidden;
     }
 
-    /* Leather/felt texture overlay */
+    /* Rusty Lake aged paper/parchment texture */
     .bg-texture {
-      background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20c0-11.05 8.95-20 20-20s20 8.95 20 20-8.95 20-20 20S20 31.05 20 20z' fill='%23000000' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+      background-image:
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
     }
 
-    /* Card texture - cream colored with subtle grain */
+    /* Vignette overlay for mysterious atmosphere */
+    .vignette::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.6) 100%);
+    }
+
+    /* Card texture - aged parchment with vintage feel */
     .card-texture {
-      background: linear-gradient(135deg, #FDF5E6 0%, #FAF0E6 50%, #F5DEB3 100%);
+      background: linear-gradient(135deg, #D4C5A9 0%, #C4B599 50%, #B8A888 100%);
       box-shadow:
-        0 4px 8px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-      border: 2px solid #D4AF37;
-      border-radius: 12px;
-    }
-
-    /* Wooden table background */
-    .bg-wood {
-      background:
-        linear-gradient(90deg, rgba(139, 90, 43, 0.1) 0%, transparent 50%, rgba(139, 90, 43, 0.1) 100%),
-        linear-gradient(#2F4F4F, #1A2F2F);
-      background-size: 40px 100%, 100% 100%;
-    }
-
-    /* Playing card style */
-    .playing-card {
-      background: linear-gradient(145deg, #fff 0%, #f5f5dc 100%);
-      border: 2px solid #8B4513;
+        0 4px 8px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+      border: 2px solid #8B6914;
       border-radius: 8px;
+    }
+
+    /* Vintage cigar lounge background */
+    .bg-lounge {
+      background:
+        radial-gradient(ellipse at center, #2C1810 0%, #1A0F0A 100%);
+    }
+
+    /* Playing card style - aged vintage look */
+    .playing-card {
+      background: linear-gradient(145deg, #D4C5A9 0%, #C4B599 50%, #B8A888 100%);
+      border: 2px solid #8B4513;
+      border-radius: 6px;
       box-shadow:
         0 3px 6px rgba(0, 0, 0, 0.3),
         0 1px 0 rgba(255, 255, 255, 0.5) inset;
@@ -122,12 +137,12 @@
       pointer-events: none;
     }
 
-    /* Gold embossed text effect */
+    /* Antique gold embossed text effect */
     .text-embossed {
-      color: #D4AF37;
+      color: #B8860B;
       text-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.3),
-        0 -1px 0 rgba(0, 0, 0, 0.5);
+        0 1px 0 rgba(255, 255, 255, 0.2),
+        0 -1px 0 rgba(0, 0, 0, 0.6);
     }
 
     /* Card flip animation */
@@ -153,16 +168,16 @@
       transform: rotateY(180deg);
     }
 
-    /* Animated glow effect for important elements */
+    /* Animated glow effect for important elements - antique gold */
     @keyframes glow-pulse {
 
       0%,
       100% {
-        box-shadow: 0 0 5px #D4AF37, 0 0 10px rgba(212, 175, 55, 0.5);
+        box-shadow: 0 0 5px #B8860B, 0 0 10px rgba(184, 134, 11, 0.5);
       }
 
       50% {
-        box-shadow: 0 0 10px #D4AF37, 0 0 20px rgba(212, 175, 55, 0.8);
+        box-shadow: 0 0 10px #B8860B, 0 0 20px rgba(184, 134, 11, 0.8);
       }
     }
 
@@ -255,7 +270,7 @@
   }
 }
 </script>
-  <script type="module" crossorigin src="/the-chameleon/assets/index-OI1tR-l5.js"></script>
+  <script type="module" crossorigin src="/the-chameleon/assets/index-DlIsIIHM.js"></script>
 </head>
 
 <body>
