@@ -1,17 +1,20 @@
 import React from 'react';
 
+// Base path for GitHub Pages deployment - Vite's base config handles this
+const BASE_PATH = '/the-chameleon';
+
 // Mysterious vintage character portraits (Rusty Lake style)
 // These are locally hosted custom-generated portraits
 export const CHARACTERS = [
-    { id: 'gentleman', image: '/avatars/avatar_gentleman_1766086639221.png', name: 'The Gentleman' },
-    { id: 'flapper', image: '/avatars/avatar_flapper_1766086653579.png', name: 'The Flapper' },
-    { id: 'detective', image: '/avatars/avatar_detective_1766086737009.png', name: 'The Detective' },
-    { id: 'aristocrat', image: '/avatars/avatar_monocle_1766086750277.png', name: 'The Aristocrat' },
-    { id: 'veiled', image: '/avatars/avatar_veiled_1766086778514.png', name: 'The Veiled Lady' },
-    { id: 'owl', image: '/avatars/avatar_owl_1766086667881.png', name: 'The Owl' },
-    { id: 'deer', image: '/avatars/avatar_deer_1766086681201.png', name: 'The Deer' },
-    { id: 'crow', image: '/avatars/avatar_crow_1766086707462.png', name: 'The Crow' },
-    { id: 'rabbit', image: '/avatars/avatar_rabbit_1766086721873.png', name: 'The Rabbit' },
+    { id: 'gentleman', image: `${BASE_PATH}/avatars/avatar_gentleman_1766086639221.png`, name: 'The Gentleman' },
+    { id: 'flapper', image: `${BASE_PATH}/avatars/avatar_flapper_1766086653579.png`, name: 'The Flapper' },
+    { id: 'detective', image: `${BASE_PATH}/avatars/avatar_detective_1766086737009.png`, name: 'The Detective' },
+    { id: 'aristocrat', image: `${BASE_PATH}/avatars/avatar_monocle_1766086750277.png`, name: 'The Aristocrat' },
+    { id: 'veiled', image: `${BASE_PATH}/avatars/avatar_veiled_1766086778514.png`, name: 'The Veiled Lady' },
+    { id: 'owl', image: `${BASE_PATH}/avatars/avatar_owl_1766086667881.png`, name: 'The Owl' },
+    { id: 'deer', image: `${BASE_PATH}/avatars/avatar_deer_1766086681201.png`, name: 'The Deer' },
+    { id: 'crow', image: `${BASE_PATH}/avatars/avatar_crow_1766086707462.png`, name: 'The Crow' },
+    { id: 'rabbit', image: `${BASE_PATH}/avatars/avatar_rabbit_1766086721873.png`, name: 'The Rabbit' },
 ];
 
 // Get character avatar URL
