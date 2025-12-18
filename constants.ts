@@ -24,17 +24,17 @@ export const DEFAULT_TOPICS: TopicCard[] = [
     words: [
       "Titanic", "Avatar", "Star Wars", "Jaws",
       "Matrix", "Frozen", "Rocky", "Alien",
-      "Gladiator", "Inception", "Coco", "Joker",
-      "Shrek", "Grease", "Psycho", "Up"
+      "Gladiator", "Inception", "Toy Story", "Joker",
+      "Shrek", "Grease", "Psycho", "The Lion King"
     ]
   },
   {
     category: "Jobs",
     words: [
       "Doctor", "Teacher", "Artist", "Pilot",
-      "Chef", "Lawyer", "Nurse", "Police",
-      "Fireman", "Actor", "Farmer", "Writer",
-      "Baker", "Judge", "Driver", "Vet"
+      "Chef", "Lawyer", "Nurse", "Police Officer",
+      "Firefighter", "Actor", "Farmer", "Writer",
+      "Baker", "Judge", "Bus Driver", "Vet"
     ]
   },
   {
@@ -42,17 +42,8 @@ export const DEFAULT_TOPICS: TopicCard[] = [
     words: [
       "Tesco", "Sainsbury's", "Asda", "Waitrose",
       "Morrisons", "Lidl", "Aldi", "Co-op",
-      "M&S", "Iceland", "Ocado", "Booths",
+      "M&S Food", "Iceland", "Ocado", "Booths",
       "Selfridges", "Harrods", "Spar", "Greggs"
-    ]
-  },
-  {
-    category: "BBC TV Shows",
-    words: [
-      "Doctor Who", "Sherlock", "EastEnders", "Top Gear",
-      "Strictly", "Line of Duty", "Fleabag", "The Office",
-      "Blue Planet", "Peaky Blinders", "Luther", "Ghosts",
-      "Casualty", "MasterChef", "The Traitors", "Poldark"
     ]
   },
   {
@@ -61,7 +52,7 @@ export const DEFAULT_TOPICS: TopicCard[] = [
       "Big Ben", "Tower Bridge", "London Eye", "The Shard",
       "Buckingham Palace", "Royal Albert Hall", "The Gherkin", "St Paul's",
       "Tate Modern", "Westminster Abbey", "Globe Theatre", "Hyde Park",
-      "Abbey Road", "Soho", "Covent Garden", "Trafford Centre"
+      "Abbey Road", "Soho", "Covent Garden", "Wembley Stadium"
     ]
   },
   {
@@ -69,26 +60,8 @@ export const DEFAULT_TOPICS: TopicCard[] = [
     words: [
       "Dairy Milk", "KitKat", "Twirl", "Wispa",
       "Mars Bar", "Snickers", "Crunchie", "Flake",
-      "Twix", "Bounty", "Topic", "Double Decker",
+      "Twix", "Bounty", "Toblerone", "Double Decker",
       "Boost", "Galaxy", "Creme Egg", "Buttons"
-    ]
-  },
-  {
-    category: "UK Cities",
-    words: [
-      "London", "Manchester", "Birmingham", "Leeds",
-      "Glasgow", "Liverpool", "Edinburgh", "Bristol",
-      "Sheffield", "Newcastle", "Cardiff", "Belfast",
-      "Brighton", "Cambridge", "Oxford", "Bath"
-    ]
-  },
-  {
-    category: "British Musicians",
-    words: [
-      "The Beatles", "Adele", "Elton John", "Ed Sheeran",
-      "Dua Lipa", "Harry Styles", "Stormzy", "Coldplay",
-      "Queen", "David Bowie", "Amy Winehouse", "Lewis Capaldi",
-      "Oasis", "Spice Girls", "Arctic Monkeys", "Sam Smith"
     ]
   },
   {
@@ -101,21 +74,12 @@ export const DEFAULT_TOPICS: TopicCard[] = [
     ]
   },
   {
-    category: "London Tube Lines",
-    words: [
-      "Northern", "Central", "Piccadilly", "Victoria",
-      "Jubilee", "District", "Circle", "Bakerloo",
-      "Metropolitan", "Elizabeth", "Hammersmith", "Overground",
-      "DLR", "Waterloo & City", "Tramlink", "Cable Car"
-    ]
-  },
-  {
     category: "Premier League Teams",
     words: [
       "Arsenal", "Aston Villa", "Chelsea", "Liverpool",
       "Man City", "Man United", "Newcastle", "Spurs",
       "Everton", "West Ham", "Brighton", "Wolves",
-      "Crystal Palace", "Brentford", "Fulham", "Luton Town"
+      "Crystal Palace", "Leicester City", "Brentford", "Nottingham Forest"
     ]
   },
   {
@@ -132,7 +96,7 @@ export const DEFAULT_TOPICS: TopicCard[] = [
     words: [
       "Love Island", "Big Brother", "I'm A Celeb", "The Apprentice",
       "Bake Off", "Gogglebox", "Made in Chelsea", "TOWIE",
-      "Britain's Got Talent", "X Factor", "Drag Race UK", "The Circle",
+      "Britain's Got Talent", "The X Factor", "Drag Race UK", "The Traitors",
       "First Dates", "Dinner Date", "Don't Tell the Bride", "Naked Attraction"
     ]
   },
@@ -141,8 +105,8 @@ export const DEFAULT_TOPICS: TopicCard[] = [
     words: [
       "Fawlty Towers", "Only Fools", "Blackadder", "The Inbetweeners",
       "Peep Show", "Father Ted", "Miranda", "Vicar of Dibley",
-      "Gavin & Stacey", "Friday Night Dinner", "Benidorm", "The Royale Family",
-      "Absolutely Fabulous", "Red Dwarf", "Spaced", "Mrs Brown's Boys"
+      "Gavin & Stacey", "Friday Night Dinner", "Benidorm", "The Royle Family",
+      "Absolutely Fabulous", "Red Dwarf", "Ghosts", "The Office"
     ]
   },
   {
@@ -150,17 +114,17 @@ export const DEFAULT_TOPICS: TopicCard[] = [
     words: [
       "Boots", "WHSmith", "Poundland", "Primark",
       "Next", "H&M", "Waterstones", "Currys",
-      "Argos", "Wilko", "Superdrug", "JD Sports",
-      "Superdry", "River Island", "Clarks", "Tk Maxx"
+      "Argos", "The Range", "Superdrug", "JD Sports",
+      "Zara", "River Island", "Clarks", "TK Maxx"
     ]
   },
   {
     category: "British Animals",
     words: [
       "Red Squirrel", "Fox", "Badger", "Hedgehog",
-      "Otter", "Roe Deer", "Hare", "Golden Eagle",
-      "Puffin", "Seal", "Dormouse", "Pine Marten",
-      "Adder", "Stoat", "Water Vole", "Robin"
+      "Otter", "Red Deer", "Hare", "Golden Eagle",
+      "Puffin", "Seal", "Highland Cow", "Pheasant",
+      "Adder", "Swan", "Seagull", "Robin"
     ]
   },
   {
@@ -168,35 +132,53 @@ export const DEFAULT_TOPICS: TopicCard[] = [
     words: [
       "Blackpool", "Brighton", "Whitby", "St Ives",
       "Scarborough", "Margate", "Bournemouth", "Southend",
-      "Skegness", "Torquay", "Eastbourne", "Tenby",
-      "Hastings", "Weymouth", "Falmouth", "Llandudno"
+      "Skegness", "Torquay", "Hastings", "Weymouth",
+      "Falmouth", "Llandudno", "Newquay", "Ayr"
     ]
   },
   {
-    category: "British Authors",
+    category: "UK TV Channels",
     words: [
-      "Shakespeare", "Dickens", "Jane Austen", "J.K. Rowling",
-      "Roald Dahl", "Agatha Christie", "Enid Blyton", "Tolkien",
-      "George Orwell", "C.S. Lewis", "Virginia Woolf", "Terry Pratchett",
-      "Jacqueline Wilson", "David Walliams", "Philip Pullman", "Beatrix Potter"
+      "BBC One", "BBC Two", "ITV1", "Channel 4",
+      "Channel 5", "Sky News", "E4", "Dave",
+      "Netflix", "Disney+", "CBeebies", "CBBC",
+      "Sky Sports", "Prime Video", "BBC iPlayer", "ITVX"
     ]
   },
   {
-    category: "UK National Parks",
+    category: "UK National Treasures",
     words: [
-      "Lake District", "Peak District", "Snowdonia", "Dartmoor",
-      "Cairngorms", "New Forest", "Broads", "Loch Lomond",
-      "South Downs", "Brecon Beacons", "Exmoor", "Yorkshire Dales",
-      "North York Moors", "Northumberland", "Pembrokeshire Coast", "The Fens"
+      "David Attenborough", "Judi Dench", "Stephen Fry", "Olivia Colman",
+      "Ian McKellen", "Maggie Smith", "Mary Berry", "Ant & Dec",
+      "Paul McCartney", "Elton John", "Tom Jones", "Miriam Margolyes",
+      "Paddington Bear", "Huw Edwards", "Alison Hammond", "Louis Theroux"
     ]
   },
   {
-    category: "British Historical Figures",
+    category: "UK Fast Food & Takeaway",
     words: [
-      "Winston Churchill", "Queen Victoria", "Henry VIII", "Florence Nightingale",
-      "Elizabeth I", "Isaac Newton", "Charles Darwin", "Horatio Nelson",
-      "Oliver Cromwell", "Isambard Brunel", "Boudica", "Mary Seacole",
-      "Stephen Hawking", "Alan Turing", "Diana, Princess of Wales", "Captain Cook"
+      "McDonald's", "KFC", "Burger King", "Nando's",
+      "Subway", "Domino's", "Pizza Hut", "Wagamama",
+      "Greggs", "Five Guys", "Taco Bell", "Leon",
+      "Papa Johns", "Itsu", "Chopstix", "German Doner Kebab"
+    ]
+  },
+  {
+    category: "UK Schools & Uni Life",
+    words: [
+      "Detention", "School Uniform", "GCSEs", "Prom",
+      "School Trip", "Lunchbox", "University", "Student Loan",
+      "Fresher's Week", "Degree", "Hall of Residence", "Graduation",
+      "Playground", "Assembly", "Sports Day", "Tuck Shop"
+    ]
+  },
+  {
+    category: "British Christmas",
+    words: [
+      "Turkey Roast", "Brussels Sprouts", "Pigs in Blankets", "Mince Pies",
+      "Christmas Pudding", "Crackers", "Pantomime", "Queen's Speech",
+      "Boxing Day", "Selection Box", "Adventskalender", "Fairytale of New York",
+      "Mistletoe", "Carol Singing", "Secret Santa", "Mulled Wine"
     ]
   },
   {
@@ -205,7 +187,7 @@ export const DEFAULT_TOPICS: TopicCard[] = [
       "Billy Connolly", "Ricky Gervais", "Peter Kay", "Dawn French",
       "James Corden", "Michael McIntyre", "Jimmy Carr", "Lee Mack",
       "Micky Flanagan", "Sarah Millican", "Greg Davies", "Bob Mortimer",
-      "Romesh Ranganathan", "Aisling Bea", "Joe Lycett", "Katherine Ryan"
+      "Romesh Ranganathan", "Aisling Bea", "Joe Lycett", "Mo Gilligan"
     ]
   },
   {
@@ -213,26 +195,8 @@ export const DEFAULT_TOPICS: TopicCard[] = [
     words: [
       "Mini", "Land Rover", "Jaguar", "Aston Martin",
       "Rolls-Royce", "Bentley", "McLaren", "Lotus",
-      "Vauxhall", "Morgan", "Caterham", "TVR",
-      "MG", "Triumph", "Rover", "Reliant Robin"
-    ]
-  },
-  {
-    category: "UK Podcasts",
-    words: [
-      "My Dad Wrote a Porno", "Off Menu", "The Rest Is Politics", "Sh**ged Married Annoyed",
-      "Parenting Hell", "That Peter Crouch Podcast", "Diary of a CEO", "Table Manners",
-      "Grounding", "Tailenders", "Exactly", "Happy Place",
-      "The News Agents", "Rex Factor", "Empire", "Uncanny"
-    ]
-  },
-  {
-    category: "British Inventions",
-    words: [
-      "World Wide Web", "Steam Engine", "Telephone", "Television",
-      "Radar", "Penicillin", "Jet Engine", "Vacuum Cleaner",
-      "Tarmac", "Clockwork Radio", "SMS Test", "Hovercraft",
-      "Light Bulb", "ATM", "CT Scanner", "Graphene"
+      "Vauxhall", "Morgan", "Caterham", "Triumph",
+      "MG", "TVR", "Rover", "Reliant Robin"
     ]
   },
   {
@@ -241,7 +205,7 @@ export const DEFAULT_TOPICS: TopicCard[] = [
       "Lewis Hamilton", "David Beckham", "Andy Murray", "Jessica Ennis-Hill",
       "Mo Farah", "Tyson Fury", "Marcus Rashford", "Emma Raducanu",
       "Wayne Rooney", "Beth Mead", "Ben Stokes", "Rory McIlroy",
-      "Chris Hoy", "Ellie Simmonds", "Tom Daley", "Adam Peaty"
+      "Chris Hoy", "Harry Kane", "Tom Daley", "Adam Peaty"
     ]
   },
   {
@@ -249,7 +213,7 @@ export const DEFAULT_TOPICS: TopicCard[] = [
     words: [
       "Phil Mitchell", "Dot Cotton", "Ken Barlow", "Bet Lynch",
       "Jack Duckworth", "Deirdre Barlow", "Peggy Mitchell", "Danny Dyer",
-      "Zoe Slater", "Bianca Jackson", "Pat Butcher", "Kat Slater",
+      "Kat Slater", "Bianca Jackson", "Pat Butcher", "Den Watts",
       "Grant Mitchell", "Ian Beale", "Roy Cropper", "Steve McDonald"
     ]
   },
@@ -258,35 +222,26 @@ export const DEFAULT_TOPICS: TopicCard[] = [
     words: [
       "Earl Grey", "English Breakfast", "Scones", "Clotted Cream",
       "Strawberry Jam", "Cucumber Sandwich", "Egg & Cress", "Victoria Sponge",
-      "Macarons", "Lemon Drizzle", "Petit Fours", "Finger Sandwiches",
-      "Smoked Salmon", "Coronation Chicken", "Fruit Cake", "Sugar Cubes"
+      "Macarons", "Lemon Drizzle", "Eclair", "Finger Sandwiches",
+      "Smoked Salmon", "Coronation Chicken", "Shortbread", "Tea Pot"
     ]
   },
   {
     category: "UK Drag Race Queens",
     words: [
-      "The Viv", "Baga Chipz", "Lawrence Chaney", "Bimini",
+      "The Vivienne", "Baga Chipz", "Lawrence Chaney", "Bimini",
       "Tayce", "Krystal Versace", "Kitty Scott-Claus", "Danny Beard",
       "Cheddar Gorgeous", "Ginger Johnson", "Michael Marouli", "Tomara Thomas",
       "Blu Hydrangea", "Cheryl Hole", "Divina De Campo", "Tia Kofi"
     ]
   },
   {
-    category: "UK Festivals",
-    words: [
-      "Glastonbury", "Reading", "Leeds Festival", "Wireless",
-      "Download", "Latitude", "Creamfields", "Boardmasters",
-      "Bestival", "V Festival", "T in the Park", "Parklife",
-      "Boomtown", "Green Man", "End of the Road", "Forbidden Forest"
-    ]
-  },
-  {
     category: "British Snacks",
     words: [
       "Monster Munch", "Wotsits", "Quavers", "Nik Naks",
-      "Scampi Fries", "Twiglets", "Pico-ball", "Frazzles",
+      "Scampi Fries", "Twiglets", "Cheesy Moments", "Frazzles",
       "Skips", "Squares", "Mini Cheddars", "Pork Scratchings",
-      "Hula Hoops", "McCoys", "Beef Hula Hoops", "Bacon Frazzles"
+      "Hula Hoops", "McCoys", "Pringles", "Walkers"
     ]
   },
   {
@@ -299,15 +254,34 @@ export const DEFAULT_TOPICS: TopicCard[] = [
     ]
   },
   {
-    category: "British Flowers",
+    category: "Common Pets",
     words: [
-      "Rose", "Bluebell", "Daffodil", "Poppy",
-      "Snowdrop", "Foxglove", "Lily of the Valley", "Lavender",
-      "Daisy", "Buttercup", "Cornflower", "Primrose",
-      "Honeysuckle", "Sweet Pea", "Dahlia", "Sun Flower"
+      "Golden Retriever", "Tabby Cat", "Hamster", "Goldfish",
+      "Rabbit", "Guinea Pig", "Budgie", "Chinchilla",
+      "Tortoise", "Parrot", "Beagle", "Pug",
+      "Siamese Cat", "Cockatiel", "Lizard", "Snake"
+    ]
+  },
+  {
+    category: "Colors",
+    words: [
+      "Red", "Blue", "Green", "Yellow",
+      "Purple", "Orange", "Pink", "Brown",
+      "Black", "White", "Grey", "Gold",
+      "Silver", "Turquoise", "Magenta", "Beige"
+    ]
+  },
+  {
+    category: "Musical Instruments",
+    words: [
+      "Guitar", "Piano", "Drums", "Violin",
+      "Saxophone", "Trumpet", "Flute", "Clarinet",
+      "Cello", "Harp", "Accordion", "Ukulele",
+      "Banjo", "Electric Guitar", "Microphone", "Tambourine"
     ]
   }
 ];
+
 
 export const GRID_COORDS = [
   "A1", "A2", "A3", "A4",
