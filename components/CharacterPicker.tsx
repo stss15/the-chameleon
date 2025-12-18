@@ -33,16 +33,18 @@ export const getCharacterById = (id: string) =>
 interface CharacterPickerProps {
     selectedCharacterId: string;
     onSelect: (characterId: string) => void;
+    takenCharacterIds?: string[]; // IDs of characters already taken by other players
 }
 
 export const CharacterPicker: React.FC<CharacterPickerProps> = ({
     selectedCharacterId,
     onSelect,
+    takenCharacterIds = [],
 }) => {
     const selectedChar = getCharacterById(selectedCharacterId);
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-3">
             <p className="text-parchment/70 text-sm text-center font-serif">Choose your character</p>
 
             {/* Preview of selected character */}
@@ -50,7 +52,7 @@ export const CharacterPicker: React.FC<CharacterPickerProps> = ({
                 <div className="relative">
                     <img
                         src={selectedChar.image}
-                        className="w-24 h-24 rounded-full object-cover border-4 border-brass shadow-lg bg-loungeDark"
+                        className="w-20 h-20 rounded-full object-cover border-4 border-brass shadow-lg bg-loungeDark"
                         alt={selectedChar.name}
                     />
                     <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-antiqueGold text-loungeDark text-xs px-2 py-0.5 rounded-full font-bold font-serif whitespace-nowrap">
@@ -59,24 +61,33 @@ export const CharacterPicker: React.FC<CharacterPickerProps> = ({
                 </div>
             </div>
 
-            {/* Character grid */}
-            <div className="grid grid-cols-3 gap-3 p-2 bg-shadow/30 rounded-lg border border-brass/20">
-                {CHARACTERS.map((char) => (
-                    <button
-                        key={char.id}
-                        onClick={() => onSelect(char.id)}
-                        className={`p-1 rounded-lg transition-all transform ${selectedCharacterId === char.id
-                            ? 'bg-antiqueGold ring-2 ring-yellow-600 scale-105'
-                            : 'bg-loungeDark/50 hover:bg-shadow hover:scale-102'
-                            }`}
-                    >
-                        <img
-                            src={char.image}
-                            className="w-full aspect-square rounded-md object-cover"
-                            alt={char.name}
-                        />
-                    </button>
-                ))}
+            {/* Character grid - scrollable */}
+            <div className="grid grid-cols-3 gap-2 p-2 bg-shadow/30 rounded-lg border border-brass/20 max-h-40 overflow-y-auto">
+                {CHARACTERS.map((char) => {
+                    const isTaken = takenCharacterIds.includes(char.id) && char.id !== selectedCharacterId;
+                    return (
+                        <button
+                            key={char.id}
+                            onClick={() => !isTaken && onSelect(char.id)}
+                            disabled={isTaken}
+                            className={`p-1 rounded-lg transition-all transform ${selectedCharacterId === char.id
+                                    ? 'bg-antiqueGold ring-2 ring-yellow-600 scale-105'
+                                    : isTaken
+                                        ? 'bg-loungeDark/30 opacity-40 cursor-not-allowed'
+                                        : 'bg-loungeDark/50 hover:bg-shadow hover:scale-102'
+                                }`}
+                        >
+                            <img
+                                src={char.image}
+                                className={`w-full aspect-square rounded-md object-cover ${isTaken ? 'grayscale' : ''}`}
+                                alt={char.name}
+                            />
+                            {isTaken && (
+                                <div className="text-xs text-parchment/50 mt-1 text-center">Taken</div>
+                            )}
+                        </button>
+                    );
+                })}
             </div>
         </div>
     );

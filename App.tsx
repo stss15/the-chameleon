@@ -391,7 +391,7 @@ const App: React.FC = () => {
 
         {/* Footer */}
         <p className="absolute bottom-6 text-parchment/30 text-xs font-serif">
-          A party game for 3-10 players
+          A party game for 3-9 players
         </p>
       </div>
     );
@@ -438,12 +438,13 @@ const App: React.FC = () => {
 
   // WAITING ROOM SCREEN 
   if (screen === 'WAITING_ROOM') {
-    const players = gameState?.players ? Object.values(gameState.players) : [];
-    const canStart = players.length >= 2 && hasEnteredName;
+    const players = gameState?.players ? Object.values(gameState.players) as Player[] : [];
+    const canStart = players.length >= 3 && players.length <= 9 && hasEnteredName;
+    const takenCharacterIds = players.map((p: Player) => p.characterStyle || p.avatarSeed).filter(Boolean);
 
     return (
-      <div className="min-h-screen bg-felt flex flex-col items-center justify-center p-4 bg-texture">
-        <div className="bg-white/10 p-6 rounded-xl w-full max-w-md border border-white/20">
+      <div className="min-h-screen bg-lounge flex flex-col items-center p-4 bg-texture overflow-y-auto">
+        <div className="bg-shadow/50 p-4 rounded-lg w-full max-w-md border border-brass/30 my-auto">
           {/* Room Code Display */}
           <div className="text-center mb-6">
             <p className="text-white/50 text-sm mb-1">Room Code</p>
@@ -502,6 +503,7 @@ const App: React.FC = () => {
               <CharacterPicker
                 selectedCharacterId={selectedCharacterId}
                 onSelect={setSelectedCharacterId}
+                takenCharacterIds={takenCharacterIds}
               />
 
               <button
