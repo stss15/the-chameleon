@@ -9,7 +9,7 @@ import { LiveChat } from './components/LiveChat';
 import { GameTutorial } from './components/GameTutorial';
 import { SideMenu, SideMenuToggle } from './components/SideMenu';
 import { CountdownTimer, useCountdown } from './components/CountdownTimer';
-import { VideoChat } from './components/VideoChat';
+import { ClueModal } from './components/ClueModal';
 import { useWebRTC } from './hooks/useWebRTC';
 import { firebaseConfig } from './config/firebase.config';
 
@@ -45,7 +45,9 @@ const App: React.FC = () => {
   const [selectedCharacterId, setSelectedCharacterId] = useState('char1'); // Fixed character ID
   const [showTutorial, setShowTutorial] = useState(true); // Show tutorial when game starts
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false); // Side menu toggle
-  const [isVideoEnabled, setIsVideoEnabled] = useState(false); // Video chat enabled
+  const [isVideoEnabled, setIsVideoEnabled] = useState(false); // Audio chat enabled
+  const [shownClue, setShownClue] = useState<{ player: Player; clue: string } | null>(null); // For clue modal
+  const [lastClueCount, setLastClueCount] = useState(0); // Track clue submissions
 
   // Initialize WebRTC for video chat
   const {
@@ -148,6 +150,26 @@ const App: React.FC = () => {
       return () => unsub();
     }
   }, [roomCode, isFirebaseReady]);
+
+  // Detect new clue submissions and show modal
+  useEffect(() => {
+    if (!gameState?.players) return;
+
+    const playersWithClues = (Object.values(gameState.players) as Player[]).filter((p) => p.clue);
+    const currentClueCount = playersWithClues.length;
+
+    if (currentClueCount > lastClueCount && lastClueCount > 0) {
+      // Find the player who just submitted (most recent - not self)
+      const newCluePlayer = playersWithClues.find((p) => p.id !== playerId);
+
+      if (newCluePlayer && newCluePlayer.clue) {
+        setShownClue({ player: newCluePlayer, clue: newCluePlayer.clue });
+      }
+    }
+
+    setLastClueCount(currentClueCount);
+  }, [gameState?.players, playerId, lastClueCount]);
+
 
   // Create a new room
   const handleCreateRoom = async () => {
@@ -408,52 +430,6 @@ const App: React.FC = () => {
             <div className="text-center mb-6">
               <p className="text-white/50 text-sm">Playing as</p>
               <p className="text-2xl font-bold text-white">{playerName}</p>
-
-              {/* Enable Camera Button */}
-              {!isVideoEnabled ? (
-                <button
-                  onClick={async () => {
-                    try {
-                      // Call getUserMedia directly in click handler for browser trust
-                      // Then pass the stream to our hook instead of discarding it
-                      const stream = await navigator.mediaDevices.getUserMedia({
-                        video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' },
-                        audio: { echoCancellation: true, noiseSuppression: true }
-                      });
-                      setIsVideoEnabled(true);
-                      await initializeWithStream(stream);
-                    } catch (err) {
-                      console.error("Camera permission denied:", err);
-                      setError("Camera/microphone access denied");
-                    }
-                  }}
-                  className="mt-4 bg-blue-600 hover:bg-blue-500 text-white py-2 px-4 rounded-lg font-medium text-sm transition flex items-center gap-2 mx-auto"
-                >
-                  <span>📹</span> Enable Camera & Mic
-                </button>
-              ) : (
-                <div className="mt-4 space-y-2">
-                  {videoError ? (
-                    <p className="text-orange-400 text-xs">{videoError}</p>
-                  ) : (
-                    <>
-                      <p className="text-green-400 text-xs">✓ Camera enabled</p>
-                      {/* Camera preview */}
-                      {localStream && (
-                        <div className="mx-auto w-24 h-24 rounded-lg overflow-hidden bg-gray-900">
-                          <video
-                            autoPlay
-                            playsInline
-                            muted
-                            ref={(el) => { if (el && localStream) el.srcObject = localStream; }}
-                            className="w-full h-full object-cover scale-x-[-1]"
-                          />
-                        </div>
-                      )}
-                    </>
-                  )}
-                </div>
-              )}
             </div>
           )}
 
@@ -464,8 +440,18 @@ const App: React.FC = () => {
               {players.map((p: Player) => (
                 <div key={p.id} className="flex items-center gap-3 bg-white/5 p-2 rounded-lg">
                   <img src={getAvatarUrl(p.avatarSeed, p.characterStyle)} className="w-8 h-8 rounded-full bg-white" />
-                  <span className="text-white font-medium">{p.name}</span>
+                  <span className="text-white font-medium flex-1">{p.name}</span>
                   {p.isHost && <span className="text-gold text-xs">(Host)</span>}
+                  {/* Kick button - host only, can't kick self */}
+                  {isHost && !p.isHost && hasEnteredName && (
+                    <button
+                      onClick={() => leaveRoom(roomCode, p.id)}
+                      className="w-6 h-6 rounded-full bg-red-600/50 hover:bg-red-600 flex items-center justify-center text-white text-xs transition"
+                      title="Remove player"
+                    >
+                      ✕
+                    </button>
+                  )}
                 </div>
               ))}
               {players.length === 0 && (
@@ -489,6 +475,16 @@ const App: React.FC = () => {
             <div className="text-center text-white/50 text-sm">
               Waiting for host to start the game...
             </div>
+          )}
+
+          {/* Leave Room Button - visible once name is entered */}
+          {hasEnteredName && (
+            <button
+              onClick={handleLeaveGame}
+              className="mt-4 w-full bg-gray-600 hover:bg-gray-500 text-white py-2 rounded-lg font-medium text-sm transition"
+            >
+              🚪 Leave Room
+            </button>
           )}
         </div>
       </div>
@@ -524,19 +520,12 @@ const App: React.FC = () => {
         <GameTutorial onComplete={() => setShowTutorial(false)} />
       )}
 
-      {/* Video Spotlight Overlay - shows during CLUES phase when video is enabled */}
-      {isVideoEnabled && gameState.phase === 'CLUES' && !isMyTurn && (
-        <VideoChat
-          mode="spotlight"
-          players={gameState.players}
-          currentPlayerId={playerId}
-          spotlightPlayerId={gameState.turnOrder[gameState.currentTurnIndex]}
-          localStream={localStream || undefined}
-          remoteStreams={remoteStreams}
-          onToggleMic={toggleMic}
-          onToggleCamera={toggleCamera}
-          isMicOn={isMicOn}
-          isCameraOn={isCameraOn}
+      {/* Clue Modal - shows when other players submit clues */}
+      {shownClue && (
+        <ClueModal
+          player={shownClue.player}
+          clue={shownClue.clue}
+          onClose={() => setShownClue(null)}
         />
       )}
 
@@ -561,7 +550,36 @@ const App: React.FC = () => {
           <span className="text-gold text-xs font-bold">ROOM</span>
           <span className="font-mono text-lg text-white tracking-wider">{roomCode}</span>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          {/* Mic Toggle Button */}
+          {gameState.phase !== 'LOBBY' && (
+            <button
+              onClick={async () => {
+                if (!isVideoEnabled) {
+                  // First time - request audio permission
+                  try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } });
+                    setIsVideoEnabled(true);
+                    await initializeWithStream(stream);
+                  } catch (err) {
+                    console.error("Mic permission denied:", err);
+                  }
+                } else {
+                  // Toggle mic
+                  toggleMic();
+                }
+              }}
+              className={`w-8 h-8 rounded-full flex items-center justify-center transition ${isVideoEnabled && isMicOn
+                ? 'bg-green-600 text-white'
+                : isVideoEnabled
+                  ? 'bg-red-600 text-white'
+                  : 'bg-gray-600 text-white/50'
+                }`}
+              title={isVideoEnabled ? (isMicOn ? 'Mute mic' : 'Unmute mic') : 'Enable mic'}
+            >
+              {isVideoEnabled && isMicOn ? '🎤' : '🔇'}
+            </button>
+          )}
           <span className="text-sm font-medium">{currentPlayer.name}</span>
           <img src={getAvatarUrl(currentPlayer.avatarSeed, currentPlayer.characterStyle)} className="w-8 h-8 rounded-full border-2 border-white bg-white" />
         </div>
@@ -673,21 +691,6 @@ const App: React.FC = () => {
             {/* VOTING PHASE */}
             {gameState.phase === 'VOTING' && (
               <div className="space-y-4">
-                {/* Video Table for Discussion */}
-                {isVideoEnabled && (
-                  <VideoChat
-                    mode="table"
-                    players={gameState.players}
-                    currentPlayerId={playerId}
-                    localStream={localStream || undefined}
-                    remoteStreams={remoteStreams}
-                    onToggleMic={toggleMic}
-                    onToggleCamera={toggleCamera}
-                    isMicOn={isMicOn}
-                    isCameraOn={isCameraOn}
-                  />
-                )}
-
                 <div className="bg-red-900/60 p-4 rounded-xl border border-red-500/30">
                   <p className="text-center text-xs text-white/50 mb-2">Round {gameState.currentRound} of {gameState.maxRounds}</p>
                   <h3 className="text-center text-lg font-bold mb-4">🔍 WHO IS THE CHAMELEON?</h3>
@@ -842,21 +845,28 @@ const App: React.FC = () => {
         </div>
       )}
 
-      {/* Live Chat when not your turn */}
-      {gameState.phase === 'CLUES' && !isMyTurn && (
-        <div className="fixed bottom-0 left-0 right-0 bg-feltDark border-t border-white/20 p-3 safe-area-inset-bottom">
-          <p className="text-white/50 text-center text-xs mb-2">
-            Waiting for <strong className="text-gold">{gameState.players[gameState.turnOrder[gameState.currentTurnIndex]]?.name}</strong>...
-          </p>
-          <LiveChat
-            messages={gameState.messages}
-            currentPlayerId={playerId}
-            onSendMessage={(text) => {
-              const char = getCharacterById(selectedCharacterId);
-              sendChatMessage(roomCode, playerId, playerName, char.style, text);
-            }}
-          />
-        </div>
+      {/* Live Chat - Collapsible at bottom during gameplay */}
+      {(gameState.phase === 'CLUES' || gameState.phase === 'VOTING') && (
+        <LiveChat
+          messages={gameState.messages}
+          currentPlayerId={playerId}
+          onSendMessage={(text) => {
+            const char = getCharacterById(selectedCharacterId);
+            sendChatMessage(roomCode, playerId, playerName, char.style, text);
+          }}
+          isMicEnabled={isVideoEnabled}
+          isMicOn={isMicOn}
+          onToggleMic={toggleMic}
+          onMicEnable={async () => {
+            try {
+              const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } });
+              setIsVideoEnabled(true);
+              await initializeWithStream(stream);
+            } catch (err) {
+              console.error("Mic permission denied:", err);
+            }
+          }}
+        />
       )}
     </div>
   );
