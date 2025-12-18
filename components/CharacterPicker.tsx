@@ -61,8 +61,8 @@ export const CharacterPicker: React.FC<CharacterPickerProps> = ({
                 </div>
             </div>
 
-            {/* Character grid - scrollable */}
-            <div className="grid grid-cols-3 gap-2 p-2 bg-shadow/30 rounded-lg border border-brass/20 max-h-40 overflow-y-auto">
+            {/* Character grid */}
+            <div className="grid grid-cols-3 gap-2 p-2 bg-shadow/30 rounded-lg border border-brass/20">
                 {CHARACTERS.map((char) => {
                     const isTaken = takenCharacterIds.includes(char.id) && char.id !== selectedCharacterId;
                     return (
@@ -71,10 +71,10 @@ export const CharacterPicker: React.FC<CharacterPickerProps> = ({
                             onClick={() => !isTaken && onSelect(char.id)}
                             disabled={isTaken}
                             className={`p-1 rounded-lg transition-all transform ${selectedCharacterId === char.id
-                                    ? 'bg-antiqueGold ring-2 ring-yellow-600 scale-105'
-                                    : isTaken
-                                        ? 'bg-loungeDark/30 opacity-40 cursor-not-allowed'
-                                        : 'bg-loungeDark/50 hover:bg-shadow hover:scale-102'
+                                ? 'bg-antiqueGold ring-2 ring-yellow-600 scale-105'
+                                : isTaken
+                                    ? 'bg-loungeDark/30 opacity-40 cursor-not-allowed'
+                                    : 'bg-loungeDark/50 hover:bg-shadow hover:scale-102'
                                 }`}
                         >
                             <img

@@ -509,7 +509,7 @@ const App: React.FC = () => {
               <button
                 onClick={handleSetName}
                 disabled={!playerName.trim()}
-                className="w-full bg-gold text-feltDark py-3 rounded-lg font-bold text-lg hover:bg-yellow-400 transition disabled:opacity-50"
+                className="w-full bg-gradient-to-b from-antiqueGold to-brass text-loungeDark py-3 rounded-lg font-bold text-lg hover:brightness-110 transition disabled:opacity-50 font-serif uppercase tracking-wide"
               >
                 Join Game
               </button>
