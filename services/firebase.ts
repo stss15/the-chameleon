@@ -147,8 +147,8 @@ export const startGame = async (roomId: string, topic: TopicCard) => {
   if (playerCount >= 5 && playerCount <= 6) maxRounds = 2;
   else if (playerCount >= 7) maxRounds = 3;
 
-  // 4. Set Game State
-  updates['phase'] = 'CLUES';
+  // 4. Set Game State - start with TOPIC_VOTE phase
+  updates['phase'] = 'TOPIC_VOTE';
   updates['topic'] = topic;
   updates['secretWordIndex'] = secretIndex;
   updates['secretCode'] = secretCode;
@@ -159,8 +159,46 @@ export const startGame = async (roomId: string, topic: TopicCard) => {
   updates['lastEliminated'] = null;
   updates['winner'] = null;
   updates['chameleonGuess'] = null;
+  updates['topicVotes'] = null; // Clear any previous votes
 
   await update(roomRef, updates);
+};
+
+// Submit a topic vote (true = keep, false = skip)
+export const submitTopicVote = async (roomId: string, playerId: string, keepTopic: boolean) => {
+  if (!db) return;
+
+  // Record this player's vote
+  await update(ref(db, `rooms/${roomId}/topicVotes`), {
+    [playerId]: keepTopic
+  });
+
+  // Check if all players have voted
+  const snapshot = await get(ref(db, `rooms/${roomId}`));
+  const state = snapshot.val() as GameState;
+  const playerCount = Object.keys(state.players).length;
+  const voteCount = state.topicVotes ? Object.keys(state.topicVotes).length : 0;
+
+  // If all voted, resolve the vote
+  if (voteCount >= playerCount) {
+    const votes = state.topicVotes || {};
+    const skipVotes = Object.values(votes).filter(v => v === false).length;
+
+    // If half or more vote against, signal to swap topic (handled by App.tsx)
+    if (skipVotes >= playerCount / 2) {
+      // Topic rejected - App.tsx will detect this and pick a new topic
+      await update(ref(db, `rooms/${roomId}`), {
+        phase: 'SETUP', // Go back to setup to pick a new topic
+        topicVotes: null
+      });
+    } else {
+      // Topic approved - proceed to CLUES phase
+      await update(ref(db, `rooms/${roomId}`), {
+        phase: 'CLUES',
+        topicVotes: null
+      });
+    }
+  }
 };
 
 export const submitClue = async (roomId: string, playerId: string, clue: string, nextTurnIndex: number, isLast: boolean) => {

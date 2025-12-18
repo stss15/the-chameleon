@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { GameState, Player, TopicCard } from './types';
-import { initFirebase, createRoom, joinRoom, setPlayerName, subscribeToRoom, startGame, submitClue, submitVote, submitChameleonGuess, resetGame, continueAfterElimination, sendChatMessage, endRoom, leaveRoom } from './services/firebase';
+import { initFirebase, createRoom, joinRoom, setPlayerName, subscribeToRoom, startGame, submitClue, submitVote, submitChameleonGuess, resetGame, continueAfterElimination, sendChatMessage, endRoom, leaveRoom, submitTopicVote } from './services/firebase';
 import { generateTopic } from './services/gemini';
 import { DEFAULT_TOPICS } from './constants';
 import { Card, TopicGrid } from './components/Card';
@@ -179,6 +179,21 @@ const App: React.FC = () => {
 
     setLastClueCount(currentClueCount);
   }, [gameState?.players, playerId, lastClueCount]);
+
+  // Auto-pick new topic when current topic is rejected (phase goes back to SETUP)
+  useEffect(() => {
+    if (!gameState || !isHost) return;
+
+    // When phase is SETUP and there's already a topic, it means the topic was rejected
+    if (gameState.phase === 'SETUP' && gameState.topic) {
+      // Pick a new random topic that's different from the current one
+      const otherTopics = DEFAULT_TOPICS.filter(t => t.category !== gameState.topic?.category);
+      const newTopic = otherTopics[Math.floor(Math.random() * otherTopics.length)];
+
+      // Restart with the new topic
+      startGame(roomCode, newTopic);
+    }
+  }, [gameState?.phase, gameState?.topic, isHost, roomCode]);
 
 
   // Create a new room
@@ -646,8 +661,69 @@ const App: React.FC = () => {
           </div>
         )}
 
+        {/* TOPIC VOTE PHASE */}
+        {gameState.phase === 'TOPIC_VOTE' && gameState.topic && (
+          <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-6">
+            <h2 className="text-xl font-bold text-gold">Vote on This Topic!</h2>
+
+            {/* Topic Preview */}
+            <div className="bg-white/10 p-6 rounded-xl border border-white/20 w-full max-w-md">
+              <p className="text-2xl font-bold text-gold mb-4">{gameState.topic.category}</p>
+              <div className="grid grid-cols-4 gap-2">
+                {gameState.topic.words.map((word) => (
+                  <div key={word} className="bg-white/5 p-2 rounded text-xs text-white/70">
+                    {word}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Vote Status */}
+            {(() => {
+              const votes = gameState.topicVotes || {};
+              const playerCount = Object.keys(gameState.players).length;
+              const voteCount = Object.keys(votes).length;
+              const hasVoted = votes[playerId] !== undefined;
+              const keepVotes = Object.values(votes).filter(v => v === true).length;
+              const skipVotes = Object.values(votes).filter(v => v === false).length;
+
+              return (
+                <>
+                  <p className="text-white/50 text-sm">
+                    Votes: {voteCount} / {playerCount}
+                    {voteCount > 0 && <span className="ml-2">(👍 {keepVotes} | 👎 {skipVotes})</span>}
+                  </p>
+
+                  {/* Vote Buttons */}
+                  {!hasVoted ? (
+                    <div className="flex gap-4">
+                      <button
+                        onClick={() => submitTopicVote(roomCode, playerId, true)}
+                        className="bg-green-600 hover:bg-green-500 text-white px-8 py-4 rounded-xl font-bold text-lg transition flex items-center gap-2"
+                      >
+                        👍 Keep It
+                      </button>
+                      <button
+                        onClick={() => submitTopicVote(roomCode, playerId, false)}
+                        className="bg-red-600 hover:bg-red-500 text-white px-8 py-4 rounded-xl font-bold text-lg transition flex items-center gap-2"
+                      >
+                        👎 Skip It
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="bg-white/10 px-6 py-3 rounded-lg">
+                      <p className="text-white">✅ You voted {votes[playerId] ? 'to keep' : 'to skip'} this topic</p>
+                      <p className="text-white/50 text-sm mt-1">Waiting for others...</p>
+                    </div>
+                  )}
+                </>
+              );
+            })()}
+          </div>
+        )}
+
         {/* PLAYING PHASE */}
-        {gameState.phase !== 'LOBBY' && gameState.topic && (
+        {gameState.phase !== 'LOBBY' && gameState.phase !== 'TOPIC_VOTE' && gameState.topic && (
           <div className="space-y-6">
 
             {/* Topic Grid - Card Style */}

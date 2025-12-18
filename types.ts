@@ -37,6 +37,7 @@ export interface TopicCard {
 export type GamePhase =
   | 'LOBBY'
   | 'SETUP'
+  | 'TOPIC_VOTE'  // New: players vote on whether to keep the topic
   | 'CLUES'
   | 'VOTING'
   | 'ELIMINATION' // New: showing who was eliminated
@@ -59,6 +60,7 @@ export interface GameState {
   winner?: 'CHAMELEON' | 'CITIZENS';
   chameleonGuess?: string;
   messages?: Record<string, ChatMessage>; // Live chat messages
+  topicVotes?: Record<string, boolean>; // playerId -> true (keep) or false (skip)
 }
 
 // Chat message for live feed
