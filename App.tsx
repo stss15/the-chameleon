@@ -234,7 +234,7 @@ const App: React.FC = () => {
       if (!playerName.trim()) return setError("Enter your name");
       setError('');
       const char = getCharacterById(selectedCharacterId);
-      await setPlayerName(roomCode, playerId, playerName.trim(), char.style, char.seed, isHost);
+      await setPlayerName(roomCode, playerId, playerName.trim(), char.id, char.id, isHost);
       setHasEnteredName(true);
       // Save session for reconnection on refresh
       saveSession(roomCode, playerId, playerName.trim(), selectedCharacterId, isHost);
@@ -994,23 +994,26 @@ const App: React.FC = () => {
         )}
       </main>
 
-      {/* Bottom-Anchored Clue Input */}
+      {/* Bottom-Anchored Clue Input - Your Turn */}
       {gameState.phase === 'CLUES' && isMyTurn && (
-        <div className="fixed bottom-0 left-0 right-0 bg-feltDark border-t border-white/20 p-4 safe-area-inset-bottom">
-          <p className="text-gold text-center text-sm font-bold mb-2">🎤 YOUR TURN!</p>
+        <div className="fixed bottom-0 left-0 right-0 bg-loungeDark border-t border-brass/30 p-4 safe-area-inset-bottom toast-enter">
+          {/* Animated Your Turn Banner */}
+          <div className="your-turn-banner text-loungeDark text-center text-sm font-bold mb-3 py-2 rounded-lg font-serif uppercase tracking-wide">
+            🎤 YOUR TURN TO GIVE A CLUE!
+          </div>
           <div className="flex gap-2">
             <input
               value={clueInput}
               onChange={e => setClueInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleClueSubmit()}
               placeholder="One word clue..."
-              className="flex-1 p-4 rounded-xl text-gray-900 font-bold text-lg outline-none"
+              className="flex-1 p-4 rounded-lg text-loungeDark font-bold text-lg outline-none bg-parchment border-2 border-brass"
               maxLength={20}
               autoFocus
             />
             <button
               onClick={handleClueSubmit}
-              className="bg-gold text-feltDark font-bold px-6 rounded-xl active:scale-95 transition"
+              className="bg-gradient-to-b from-antiqueGold to-brass text-loungeDark font-bold px-6 rounded-lg btn-press font-serif uppercase"
             >
               SEND
             </button>
@@ -1026,7 +1029,7 @@ const App: React.FC = () => {
           currentPlayerId={playerId}
           onSendMessage={(text) => {
             const char = getCharacterById(selectedCharacterId);
-            sendChatMessage(roomCode, playerId, playerName, char.style, text);
+            sendChatMessage(roomCode, playerId, playerName, char.id, text);
           }}
           isMicEnabled={isVideoEnabled}
           isMicOn={isMicOn}

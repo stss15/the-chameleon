@@ -1,30 +1,27 @@
 import React from 'react';
 
-// Available characters - each has a FIXED seed so they always look the same
-// Using unique seeds ensures consistent, recognizable characters
-// Styles: notionists (hand-drawn), open-peeps (illustrated), big-ears (cute), thumbs (fun)
+// Mysterious vintage character portraits (Rusty Lake style)
+// These are locally hosted custom-generated portraits
 export const CHARACTERS = [
-    { id: 'char1', style: 'notionists', seed: 'Felix', name: 'Felix' },
-    { id: 'char2', style: 'notionists', seed: 'Sophie', name: 'Sophie' },
-    { id: 'char3', style: 'notionists', seed: 'Charlie', name: 'Charlie' },
-    { id: 'char4', style: 'notionists', seed: 'Emma', name: 'Emma' },
-    { id: 'char5', style: 'open-peeps', seed: 'Max', name: 'Max' },
-    { id: 'char6', style: 'open-peeps', seed: 'Lily', name: 'Lily' },
-    { id: 'char7', style: 'open-peeps', seed: 'Oscar', name: 'Oscar' },
-    { id: 'char8', style: 'open-peeps', seed: 'Mia', name: 'Mia' },
-    { id: 'char9', style: 'big-ears', seed: 'Jack', name: 'Jack' },
-    { id: 'char10', style: 'big-ears', seed: 'Ruby', name: 'Ruby' },
-    { id: 'char11', style: 'big-ears', seed: 'Harry', name: 'Harry' },
-    { id: 'char12', style: 'big-ears', seed: 'Poppy', name: 'Poppy' },
-    { id: 'char13', style: 'thumbs', seed: 'Leo', name: 'Leo' },
-    { id: 'char14', style: 'thumbs', seed: 'Ivy', name: 'Ivy' },
-    { id: 'char15', style: 'thumbs', seed: 'Alfie', name: 'Alfie' },
-    { id: 'char16', style: 'thumbs', seed: 'Daisy', name: 'Daisy' },
+    { id: 'gentleman', image: '/avatars/avatar_gentleman_1766086639221.png', name: 'The Gentleman' },
+    { id: 'flapper', image: '/avatars/avatar_flapper_1766086653579.png', name: 'The Flapper' },
+    { id: 'detective', image: '/avatars/avatar_detective_1766086737009.png', name: 'The Detective' },
+    { id: 'aristocrat', image: '/avatars/avatar_monocle_1766086750277.png', name: 'The Aristocrat' },
+    { id: 'veiled', image: '/avatars/avatar_veiled_1766086778514.png', name: 'The Veiled Lady' },
+    { id: 'owl', image: '/avatars/avatar_owl_1766086667881.png', name: 'The Owl' },
+    { id: 'deer', image: '/avatars/avatar_deer_1766086681201.png', name: 'The Deer' },
+    { id: 'crow', image: '/avatars/avatar_crow_1766086707462.png', name: 'The Crow' },
+    { id: 'rabbit', image: '/avatars/avatar_rabbit_1766086721873.png', name: 'The Rabbit' },
 ];
 
-// Generate avatar URL for a specific character
-export const getCharacterUrl = (style: string, seed: string) =>
-    `https://api.dicebear.com/7.x/${style}/svg?seed=${encodeURIComponent(seed)}`;
+// Get character avatar URL
+export const getCharacterUrl = (style: string, seed: string) => {
+    // For backward compatibility, check if this is actually a character ID
+    const char = CHARACTERS.find(c => c.id === seed || c.id === style);
+    if (char) return char.image;
+    // Fallback to first character
+    return CHARACTERS[0].image;
+};
 
 // Get character by ID
 export const getCharacterById = (id: string) =>
@@ -43,36 +40,36 @@ export const CharacterPicker: React.FC<CharacterPickerProps> = ({
 
     return (
         <div className="space-y-4">
-            <p className="text-white/70 text-sm text-center">Choose your character</p>
+            <p className="text-parchment/70 text-sm text-center font-serif">Choose your character</p>
 
             {/* Preview of selected character */}
             <div className="flex justify-center">
                 <div className="relative">
                     <img
-                        src={getCharacterUrl(selectedChar.style, selectedChar.seed)}
-                        className="w-24 h-24 rounded-full bg-white border-4 border-gold shadow-lg"
-                        alt="Your character"
+                        src={selectedChar.image}
+                        className="w-24 h-24 rounded-full object-cover border-4 border-brass shadow-lg bg-loungeDark"
+                        alt={selectedChar.name}
                     />
-                    <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-gold text-feltDark text-xs px-2 py-0.5 rounded-full font-bold">
+                    <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-antiqueGold text-loungeDark text-xs px-2 py-0.5 rounded-full font-bold font-serif whitespace-nowrap">
                         {selectedChar.name}
                     </div>
                 </div>
             </div>
 
-            {/* Character grid - FIXED sprites that don't change */}
-            <div className="grid grid-cols-4 gap-2 max-h-48 overflow-y-auto p-2 bg-black/20 rounded-lg">
+            {/* Character grid */}
+            <div className="grid grid-cols-3 gap-3 p-2 bg-shadow/30 rounded-lg border border-brass/20">
                 {CHARACTERS.map((char) => (
                     <button
                         key={char.id}
                         onClick={() => onSelect(char.id)}
-                        className={`p-1 rounded-lg transition-all ${selectedCharacterId === char.id
-                            ? 'bg-gold ring-2 ring-yellow-300 scale-105'
-                            : 'bg-white/10 hover:bg-white/20'
+                        className={`p-1 rounded-lg transition-all transform ${selectedCharacterId === char.id
+                            ? 'bg-antiqueGold ring-2 ring-yellow-600 scale-105'
+                            : 'bg-loungeDark/50 hover:bg-shadow hover:scale-102'
                             }`}
                     >
                         <img
-                            src={getCharacterUrl(char.style, char.seed)}
-                            className="w-full aspect-square rounded-md bg-white"
+                            src={char.image}
+                            className="w-full aspect-square rounded-md object-cover"
                             alt={char.name}
                         />
                     </button>
@@ -83,4 +80,3 @@ export const CharacterPicker: React.FC<CharacterPickerProps> = ({
 };
 
 export default CharacterPicker;
-
