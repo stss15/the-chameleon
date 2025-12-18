@@ -2,66 +2,48 @@ import { TopicCard } from "./types";
 
 export const DEFAULT_TOPICS: TopicCard[] = [
   {
-    category: "Fruit",
+    category: "British Sitcoms",
     words: [
-      "Apple", "Banana", "Orange", "Grape",
-      "Mango", "Strawberry", "Pineapple", "Kiwi",
-      "Lemon", "Cherry", "Watermelon", "Peach",
-      "Pear", "Plum", "Coconut", "Lime"
+      "Fawlty Towers", "Only Fools", "Blackadder", "The Inbetweeners",
+      "Peep Show", "Father Ted", "Miranda", "Vicar of Dibley",
+      "Gavin & Stacey", "Friday Night Dinner", "Benidorm", "The Royle Family",
+      "Absolutely Fabulous", "Red Dwarf", "Ghosts", "The Office"
     ]
   },
   {
-    category: "Countries",
+    category: "Harry Potter Universe",
     words: [
-      "France", "Japan", "Brazil", "Canada",
-      "Egypt", "Australia", "India", "Italy",
-      "China", "Mexico", "Germany", "Spain",
-      "Russia", "Kenya", "Thailand", "Peru"
+      "Harry Potter", "Dumbledore", "Snape", "Hagrid",
+      "Voldemort", "Hermione", "Ron Weasley", "Draco Malfoy",
+      "Dobby", "Sirius Black", "Hogwarts", "Quidditch",
+      "The Sorting Hat", "Diagon Alley", "Butterbeer", "Golden Snitch"
     ]
   },
   {
-    category: "Movies",
+    category: "British Bands & Musicians",
     words: [
-      "Titanic", "Avatar", "Star Wars", "Jaws",
-      "Matrix", "Frozen", "Rocky", "Alien",
-      "Gladiator", "Inception", "Toy Story", "Joker",
-      "Shrek", "Grease", "Psycho", "The Lion King"
+      "The Beatles", "Queen", "Oasis", "Spice Girls",
+      "Adele", "David Bowie", "Elton John", "Ed Sheeran",
+      "Coldplay", "Rolling Stones", "Blur", "Amy Winehouse",
+      "Pink Floyd", "Arctic Monkeys", "Take That", "One Direction"
     ]
   },
   {
-    category: "Jobs",
+    category: "UK Reality TV",
     words: [
-      "Doctor", "Teacher", "Artist", "Pilot",
-      "Chef", "Lawyer", "Nurse", "Police Officer",
-      "Firefighter", "Actor", "Farmer", "Writer",
-      "Baker", "Judge", "Bus Driver", "Vet"
+      "Love Island", "Big Brother", "I'm A Celeb", "The Apprentice",
+      "Bake Off", "Gogglebox", "Made in Chelsea", "TOWIE",
+      "Britain's Got Talent", "The X Factor", "Strictly", "The Traitors",
+      "First Dates", "Dinner Date", "Come Dine With Me", "The Chase"
     ]
   },
   {
-    category: "UK Supermarkets",
+    category: "Disney Movies",
     words: [
-      "Tesco", "Sainsbury's", "Asda", "Waitrose",
-      "Morrisons", "Lidl", "Aldi", "Co-op",
-      "M&S Food", "Iceland", "Ocado", "Booths",
-      "Selfridges", "Harrods", "Spar", "Greggs"
-    ]
-  },
-  {
-    category: "London Landmarks",
-    words: [
-      "Big Ben", "Tower Bridge", "London Eye", "The Shard",
-      "Buckingham Palace", "Royal Albert Hall", "The Gherkin", "St Paul's",
-      "Tate Modern", "Westminster Abbey", "Globe Theatre", "Hyde Park",
-      "Abbey Road", "Soho", "Covent Garden", "Wembley Stadium"
-    ]
-  },
-  {
-    category: "British Chocolate",
-    words: [
-      "Dairy Milk", "KitKat", "Twirl", "Wispa",
-      "Mars Bar", "Snickers", "Crunchie", "Flake",
-      "Twix", "Bounty", "Toblerone", "Double Decker",
-      "Boost", "Galaxy", "Creme Egg", "Buttons"
+      "The Lion King", "Frozen", "Aladdin", "Toy Story",
+      "Beauty & Beast", "Little Mermaid", "Mulan", "Moana",
+      "Finding Nemo", "Shrek", "Cinderella", "Snow White",
+      "Jungle Book", "Peter Pan", "101 Dalmatians", "Mary Poppins"
     ]
   },
   {
@@ -74,210 +56,129 @@ export const DEFAULT_TOPICS: TopicCard[] = [
     ]
   },
   {
-    category: "Premier League Teams",
+    category: "British Chocolate",
     words: [
-      "Arsenal", "Aston Villa", "Chelsea", "Liverpool",
-      "Man City", "Man United", "Newcastle", "Spurs",
-      "Everton", "West Ham", "Brighton", "Wolves",
-      "Crystal Palace", "Leicester City", "Brentford", "Nottingham Forest"
+      "Dairy Milk", "KitKat", "Twirl", "Wispa",
+      "Mars Bar", "Snickers", "Crunchie", "Flake",
+      "Twix", "Bounty", "Toblerone", "Double Decker",
+      "Boost", "Galaxy", "Creme Egg", "Smarties"
     ]
   },
   {
-    category: "British Food",
+    category: "Condiments & Sauces",
     words: [
-      "Fish & Chips", "Sunday Roast", "Full English", "Shepherd’s Pie",
-      "Bangers & Mash", "Steak & Kidney Pie", "Toad in the Hole", "Cornish Pasty",
-      "Scotch Egg", "Pork Pie", "Trifle", "Scones",
-      "Bakewell Tart", "Eton Mess", "Sticky Toffee Pudding", "Crumpets"
+      "Tomato Ketchup", "Brown Sauce", "Mayonnaise", "Salad Cream",
+      "Marmite", "Branston Pickle", "Piccalilli", "Mint Sauce",
+      "Gravy", "Curry Sauce", "Vinegar", "Mustard",
+      "Tartare Sauce", "Soy Sauce", "BBQ Sauce", "Sweet Chilli"
     ]
   },
   {
-    category: "UK Reality TV",
+    category: "The Pub",
     words: [
-      "Love Island", "Big Brother", "I'm A Celeb", "The Apprentice",
-      "Bake Off", "Gogglebox", "Made in Chelsea", "TOWIE",
-      "Britain's Got Talent", "The X Factor", "Drag Race UK", "The Traitors",
-      "First Dates", "Dinner Date", "Don't Tell the Bride", "Naked Attraction"
+      "Pint of Lager", "Guinness", "Cider", "Gin & Tonic",
+      "Packet of Crisps", "Pork Scratchings", "Peanuts", "Sunday Roast",
+      "Dartboard", "Pool Table", "Jukebox", "Last Orders",
+      "Beer Garden", "The Landlord", "Quiz Night", "Sticky Carpet"
     ]
   },
   {
-    category: "British Sitcoms",
+    category: "UK Fast Food",
     words: [
-      "Fawlty Towers", "Only Fools", "Blackadder", "The Inbetweeners",
-      "Peep Show", "Father Ted", "Miranda", "Vicar of Dibley",
-      "Gavin & Stacey", "Friday Night Dinner", "Benidorm", "The Royle Family",
-      "Absolutely Fabulous", "Red Dwarf", "Ghosts", "The Office"
+      "Greggs", "Nando's", "McDonald's", "KFC",
+      "Burger King", "Domino's", "Pizza Hut", "Subway",
+      "Five Guys", "Wagamama", "Wetherspoons", "The Chippy",
+      "Kebab Shop", "Chinese Takeaway", "Indian Takeaway", "Pizza Express"
+    ]
+  },
+  {
+    category: "British Puddings",
+    words: [
+      "Sticky Toffee", "Apple Crumble", "Trifle", "Victoria Sponge",
+      "Eton Mess", "Baked Alaska", "Spotted Dick", "Christmas Pudding",
+      "Bread & Butter", "Bakewell Tart", "Lemon Drizzle", "Scones",
+      "Cheesecake", "Profiteroles", "Colin (Caterpillar)", "Custard"
+    ]
+  },
+  {
+    category: "UK Supermarkets",
+    words: [
+      "Tesco", "Sainsbury's", "Asda", "Waitrose",
+      "Morrisons", "Lidl", "Aldi", "Co-op",
+      "M&S Food", "Iceland", "Ocado", "Booths",
+      "Whole Foods", "Costco", "Spar", "Corner Shop"
+    ]
+  },
+  {
+    category: "London Landmarks",
+    words: [
+      "Big Ben", "Tower Bridge", "London Eye", "The Shard",
+      "Buckingham Palace", "The Tube", "Oxford Street", "Trafalgar Sq",
+      "Piccadilly Circus", "Hyde Park", "Wembley", "Wimbledon",
+      "The Gherkin", "River Thames", "Natural History", "Harrods"
     ]
   },
   {
     category: "UK High Street",
     words: [
-      "Boots", "WHSmith", "Poundland", "Primark",
+      "Primark", "Boots", "WHSmith", "Poundland",
       "Next", "H&M", "Waterstones", "Currys",
-      "Argos", "The Range", "Superdrug", "JD Sports",
-      "Zara", "River Island", "Clarks", "TK Maxx"
+      "Argos", "Superdrug", "JD Sports", "Sports Direct",
+      "Zara", "Clarks", "TK Maxx", "Charity Shop"
     ]
   },
   {
-    category: "British Animals",
+    category: "School Days",
     words: [
-      "Red Squirrel", "Fox", "Badger", "Hedgehog",
-      "Otter", "Red Deer", "Hare", "Golden Eagle",
-      "Puffin", "Seal", "Highland Cow", "Pheasant",
-      "Adder", "Swan", "Seagull", "Robin"
+      "Assembly", "Detention", "PE Kit", "Packed Lunch",
+      "Homework", "Uniform", "Headteacher", "Break Time",
+      "Sports Day", "School Bus", "Exam Hall", "Whiteboard",
+      "Register", "Playground", "School Trip", "Tuck Shop"
     ]
   },
   {
-    category: "UK Seaside Towns",
+    category: "Household Objects",
     words: [
-      "Blackpool", "Brighton", "Whitby", "St Ives",
-      "Scarborough", "Margate", "Bournemouth", "Southend",
-      "Skegness", "Torquay", "Hastings", "Weymouth",
-      "Falmouth", "Llandudno", "Newquay", "Ayr"
+      "Kettle", "Toaster", "Washing Machine", "Microwave",
+      "Television", "Sofa", "Duvet", "Pillow",
+      "Henry Hoover", "Ironing Board", "Mug", "Teaspoon",
+      "Remote Control", "Laptop", "Fridge", "Toilet Roll"
     ]
   },
   {
-    category: "UK TV Channels",
+    category: "Transportation",
     words: [
-      "BBC One", "BBC Two", "ITV1", "Channel 4",
-      "Channel 5", "Sky News", "E4", "Dave",
-      "Netflix", "Disney+", "CBeebies", "CBBC",
-      "Sky Sports", "Prime Video", "BBC iPlayer", "ITVX"
+      "Double Decker", "Black Cab", "Train", "Tube",
+      "Tram", "Ferry", "Aeroplane", "Helicopter",
+      "Bicycle", "Motorbike", "Scooter", "Skateboard",
+      "Van", "Lorry", "Tractor", "Police Car"
     ]
   },
   {
-    category: "UK National Treasures",
+    category: "Animals",
     words: [
-      "David Attenborough", "Judi Dench", "Stephen Fry", "Olivia Colman",
-      "Ian McKellen", "Maggie Smith", "Mary Berry", "Ant & Dec",
-      "Paul McCartney", "Elton John", "Tom Jones", "Miriam Margolyes",
-      "Paddington Bear", "Huw Edwards", "Alison Hammond", "Louis Theroux"
+      "Lion", "Tiger", "Elephant", "Giraffe",
+      "Monkey", "Penguin", "Polar Bear", "Kangaroo",
+      "Dog", "Cat", "Rabbit", "Hamster",
+      "Cow", "Sheep", "Pig", "Chicken"
     ]
   },
   {
-    category: "UK Fast Food & Takeaway",
+    category: "Occupations",
     words: [
-      "McDonald's", "KFC", "Burger King", "Nando's",
-      "Subway", "Domino's", "Pizza Hut", "Wagamama",
-      "Greggs", "Five Guys", "Taco Bell", "Leon",
-      "Papa Johns", "Itsu", "Chopstix", "German Doner Kebab"
+      "Doctor", "Teacher", "Police Officer", "Firefighter",
+      "Chef", "Farmer", "Builder", "Plumber",
+      "Hairdresser", "Bus Driver", "Pilot", "Astronaut",
+      "Dentist", "Vet", "Artist", "Singer"
     ]
   },
   {
-    category: "UK Schools & Uni Life",
+    category: "Sports",
     words: [
-      "Detention", "School Uniform", "GCSEs", "Prom",
-      "School Trip", "Lunchbox", "University", "Student Loan",
-      "Fresher's Week", "Degree", "Hall of Residence", "Graduation",
-      "Playground", "Assembly", "Sports Day", "Tuck Shop"
-    ]
-  },
-  {
-    category: "British Christmas",
-    words: [
-      "Turkey Roast", "Brussels Sprouts", "Pigs in Blankets", "Mince Pies",
-      "Christmas Pudding", "Crackers", "Pantomime", "Queen's Speech",
-      "Boxing Day", "Selection Box", "Adventskalender", "Fairytale of New York",
-      "Mistletoe", "Carol Singing", "Secret Santa", "Mulled Wine"
-    ]
-  },
-  {
-    category: "British Comedians",
-    words: [
-      "Billy Connolly", "Ricky Gervais", "Peter Kay", "Dawn French",
-      "James Corden", "Michael McIntyre", "Jimmy Carr", "Lee Mack",
-      "Micky Flanagan", "Sarah Millican", "Greg Davies", "Bob Mortimer",
-      "Romesh Ranganathan", "Aisling Bea", "Joe Lycett", "Mo Gilligan"
-    ]
-  },
-  {
-    category: "UK Car Brands",
-    words: [
-      "Mini", "Land Rover", "Jaguar", "Aston Martin",
-      "Rolls-Royce", "Bentley", "McLaren", "Lotus",
-      "Vauxhall", "Morgan", "Caterham", "Triumph",
-      "MG", "TVR", "Rover", "Reliant Robin"
-    ]
-  },
-  {
-    category: "British Sports Stars",
-    words: [
-      "Lewis Hamilton", "David Beckham", "Andy Murray", "Jessica Ennis-Hill",
-      "Mo Farah", "Tyson Fury", "Marcus Rashford", "Emma Raducanu",
-      "Wayne Rooney", "Beth Mead", "Ben Stokes", "Rory McIlroy",
-      "Chris Hoy", "Harry Kane", "Tom Daley", "Adam Peaty"
-    ]
-  },
-  {
-    category: "UK Soap Characters",
-    words: [
-      "Phil Mitchell", "Dot Cotton", "Ken Barlow", "Bet Lynch",
-      "Jack Duckworth", "Deirdre Barlow", "Peggy Mitchell", "Danny Dyer",
-      "Kat Slater", "Bianca Jackson", "Pat Butcher", "Den Watts",
-      "Grant Mitchell", "Ian Beale", "Roy Cropper", "Steve McDonald"
-    ]
-  },
-  {
-    category: "British Afternoon Tea",
-    words: [
-      "Earl Grey", "English Breakfast", "Scones", "Clotted Cream",
-      "Strawberry Jam", "Cucumber Sandwich", "Egg & Cress", "Victoria Sponge",
-      "Macarons", "Lemon Drizzle", "Eclair", "Finger Sandwiches",
-      "Smoked Salmon", "Coronation Chicken", "Shortbread", "Tea Pot"
-    ]
-  },
-  {
-    category: "UK Drag Race Queens",
-    words: [
-      "The Vivienne", "Baga Chipz", "Lawrence Chaney", "Bimini",
-      "Tayce", "Krystal Versace", "Kitty Scott-Claus", "Danny Beard",
-      "Cheddar Gorgeous", "Ginger Johnson", "Michael Marouli", "Tomara Thomas",
-      "Blu Hydrangea", "Cheryl Hole", "Divina De Campo", "Tia Kofi"
-    ]
-  },
-  {
-    category: "British Snacks",
-    words: [
-      "Monster Munch", "Wotsits", "Quavers", "Nik Naks",
-      "Scampi Fries", "Twiglets", "Cheesy Moments", "Frazzles",
-      "Skips", "Squares", "Mini Cheddars", "Pork Scratchings",
-      "Hula Hoops", "McCoys", "Pringles", "Walkers"
-    ]
-  },
-  {
-    category: "UK Holiday Spots (Intl)",
-    words: [
-      "Benidorm", "Magaluf", "Ibiza", "Tenerife",
-      "Lanzarote", "Algarve", "Majorca", "Costa del Sol",
-      "Zante", "Kavos", "Dubai", "New York",
-      "Orlando", "Paris", "Amsterdam", "Rome"
-    ]
-  },
-  {
-    category: "Common Pets",
-    words: [
-      "Golden Retriever", "Tabby Cat", "Hamster", "Goldfish",
-      "Rabbit", "Guinea Pig", "Budgie", "Chinchilla",
-      "Tortoise", "Parrot", "Beagle", "Pug",
-      "Siamese Cat", "Cockatiel", "Lizard", "Snake"
-    ]
-  },
-  {
-    category: "Colors",
-    words: [
-      "Red", "Blue", "Green", "Yellow",
-      "Purple", "Orange", "Pink", "Brown",
-      "Black", "White", "Grey", "Gold",
-      "Silver", "Turquoise", "Magenta", "Beige"
-    ]
-  },
-  {
-    category: "Musical Instruments",
-    words: [
-      "Guitar", "Piano", "Drums", "Violin",
-      "Saxophone", "Trumpet", "Flute", "Clarinet",
-      "Cello", "Harp", "Accordion", "Ukulele",
-      "Banjo", "Electric Guitar", "Microphone", "Tambourine"
+      "Football", "Rugby", "Tennis", "Cricket",
+      "Golf", "Snooker", "Darts", "Boxing",
+      "Athletics", "Formula 1", "Swimming", "Cycling",
+      "Basketball", "Gymnastics", "Netball", "Badminton"
     ]
   }
 ];
