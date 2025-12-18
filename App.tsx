@@ -14,8 +14,8 @@ import { useWebRTC } from './hooks/useWebRTC';
 import { firebaseConfig } from './config/firebase.config';
 
 // Helper for avatars - uses player's selected character style
-const getAvatarUrl = (seed: string, style: string = 'adventurer') =>
-  `https://api.dicebear.com/7.x/${style}/svg?seed=${encodeURIComponent(seed)}`;
+const getAvatarUrl = (seed: string, style: string = 'gentleman') =>
+  getCharacterUrl(style, seed);
 
 // Screen states for the app flow
 type ScreenState = 'HOME' | 'JOIN_CODE' | 'WAITING_ROOM' | 'GAME';
