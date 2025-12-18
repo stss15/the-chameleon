@@ -103,6 +103,16 @@ const App: React.FC = () => {
         localStorage.removeItem('chameleon_session');
       }
     }
+
+    // Check URL for room code (for share links)
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomFromUrl = urlParams.get('room');
+    if (roomFromUrl && !roomCode) {
+      console.log("Room code from URL:", roomFromUrl);
+      setJoinCodeInput(roomFromUrl.toUpperCase());
+      // Clear the URL param to avoid confusion on refresh
+      window.history.replaceState({}, '', window.location.pathname);
+    }
   }, [isFirebaseReady]);
 
   // Save session to localStorage when it changes
@@ -393,6 +403,36 @@ const App: React.FC = () => {
             <p className="text-white/50 text-sm mb-1">Room Code</p>
             <p className="text-5xl font-mono font-bold text-gold tracking-[0.2em]">{roomCode}</p>
             <p className="text-white/50 text-xs mt-2">Share this code with friends!</p>
+
+            {/* Share Buttons */}
+            <div className="flex justify-center gap-2 mt-3">
+              <button
+                onClick={() => {
+                  const shareUrl = `${window.location.origin}${window.location.pathname}?room=${roomCode}`;
+                  navigator.clipboard.writeText(shareUrl).then(() => {
+                    setError('');
+                    alert('Link copied to clipboard!');
+                  }).catch(() => {
+                    // Fallback: copy just the room code
+                    navigator.clipboard.writeText(roomCode);
+                    alert('Room code copied!');
+                  });
+                }}
+                className="bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded-lg text-sm font-medium transition flex items-center gap-1"
+              >
+                📋 Copy Link
+              </button>
+              <button
+                onClick={() => {
+                  const shareUrl = `${window.location.origin}${window.location.pathname}?room=${roomCode}`;
+                  const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(`Join my Chameleon game! 🦎\n\nRoom Code: ${roomCode}\n\nClick to join: ${shareUrl}`)}`;
+                  window.open(whatsappUrl, '_blank');
+                }}
+                className="bg-green-600 hover:bg-green-500 text-white px-3 py-2 rounded-lg text-sm font-medium transition flex items-center gap-1"
+              >
+                💬 WhatsApp
+              </button>
+            </div>
           </div>
 
           {error && <div className="bg-red-500/20 text-red-200 p-2 rounded text-center text-sm mb-4">{error}</div>}
