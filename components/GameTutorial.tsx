@@ -67,20 +67,20 @@ export const GameTutorial: React.FC<GameTutorialProps> = ({ onComplete }) => {
 
                 {/* Content */}
                 <div className="text-5xl mb-4">{step.emoji}</div>
-                <h3 className="text-xl font-bold text-feltDark mb-2">{step.title}</h3>
-                <p className="text-feltDark/70 text-sm mb-6">{step.text}</p>
+                <h3 className="text-xl font-bold text-loungeDark mb-2">{step.title}</h3>
+                <p className="text-loungeDark/80 text-sm mb-6">{step.text}</p>
 
                 {/* Buttons */}
                 <div className="flex gap-3">
                     <button
                         onClick={onComplete}
-                        className="flex-1 py-3 rounded-lg border-2 border-feltDark/30 text-feltDark/70 font-bold hover:bg-gray-100 transition"
+                        className="flex-1 py-3 rounded-lg border-2 border-loungeDark/30 text-loungeDark font-bold hover:bg-loungeDark/10 transition"
                     >
                         Skip
                     </button>
                     <button
                         onClick={handleNext}
-                        className="flex-1 py-3 rounded-lg bg-gold text-feltDark font-bold hover:bg-yellow-400 transition"
+                        className="flex-1 py-3 rounded-lg bg-gradient-to-b from-antiqueGold to-brass text-loungeDark font-bold hover:brightness-110 transition"
                     >
                         {isLastStep ? "Let's Play!" : 'Next'}
                     </button>
