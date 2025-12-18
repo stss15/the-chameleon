@@ -339,29 +339,73 @@ const App: React.FC = () => {
     );
   }
 
-  // HOME SCREEN
+  // HOME SCREEN - Game Show Style!
   if (screen === 'HOME') {
     return (
-      <div className="min-h-screen bg-felt flex flex-col items-center justify-center p-4 bg-texture">
-        <h1 className="text-5xl font-serif font-bold text-gold mb-8 drop-shadow-lg">🦎 The Chameleon</h1>
+      <div className="min-h-screen bg-gradient-to-b from-purple-900 via-indigo-900 to-black flex flex-col items-center justify-center p-4 overflow-hidden relative">
+        {/* Animated background stars */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-10 left-10 w-2 h-2 bg-yellow-300 rounded-full animate-pulse" />
+          <div className="absolute top-20 right-20 w-3 h-3 bg-yellow-200 rounded-full animate-ping" style={{ animationDuration: '2s' }} />
+          <div className="absolute top-40 left-1/4 w-2 h-2 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.5s' }} />
+          <div className="absolute bottom-40 right-1/3 w-2 h-2 bg-yellow-400 rounded-full animate-ping" style={{ animationDuration: '3s' }} />
+          <div className="absolute bottom-20 left-20 w-3 h-3 bg-white rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
+          <div className="absolute top-1/3 right-10 w-2 h-2 bg-yellow-100 rounded-full animate-ping" style={{ animationDuration: '2.5s' }} />
+        </div>
 
-        <div className="space-y-4 w-full max-w-xs">
+        {/* Spotlight effect */}
+        <div className="absolute inset-0 bg-gradient-radial from-yellow-500/10 via-transparent to-transparent pointer-events-none" />
+
+        {/* Presents text */}
+        <p className="text-white/60 text-sm uppercase tracking-[0.5em] mb-2 animate-fade-in">
+          Steven Stewart presents
+        </p>
+
+        {/* Main title with dramatic styling */}
+        <div className="relative mb-4">
+          <h1 className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 via-yellow-500 to-orange-600 drop-shadow-2xl tracking-tight" style={{ textShadow: '0 0 40px rgba(255,200,0,0.5), 0 0 80px rgba(255,150,0,0.3)' }}>
+            THE CHAMELEON
+          </h1>
+          {/* Glow effect */}
+          <div className="absolute inset-0 text-6xl md:text-8xl font-black text-yellow-400 blur-2xl opacity-30">
+            THE CHAMELEON
+          </div>
+        </div>
+
+        {/* Chameleon emoji with bounce */}
+        <div className="text-7xl mb-8 animate-bounce" style={{ animationDuration: '2s' }}>
+          🦎
+        </div>
+
+        {/* Tagline */}
+        <p className="text-yellow-200/80 text-lg md:text-xl italic mb-10 text-center max-w-md">
+          "Can you spot the imposter... or are you the one blending in?"
+        </p>
+
+        {/* Buttons with game show styling */}
+        <div className="space-y-4 w-full max-w-xs relative z-10">
           {error && <div className="bg-red-500/20 text-red-200 p-3 rounded-lg text-center text-sm border border-red-500/30">{error}</div>}
 
           <button
             onClick={handleCreateRoom}
-            className="w-full bg-gold text-feltDark py-4 rounded-xl font-bold text-xl hover:bg-yellow-400 transition shadow-lg"
+            className="w-full bg-gradient-to-r from-yellow-400 via-yellow-500 to-orange-500 text-black py-5 rounded-2xl font-black text-2xl hover:from-yellow-300 hover:to-orange-400 transition-all shadow-2xl transform hover:scale-105 uppercase tracking-wide"
+            style={{ boxShadow: '0 0 30px rgba(255,200,0,0.4), 0 10px 40px rgba(0,0,0,0.5)' }}
           >
-            Create Room
+            🎬 Host a Game
           </button>
 
           <button
             onClick={() => { setScreen('JOIN_CODE'); setError(''); }}
-            className="w-full bg-white/10 text-white py-4 rounded-xl font-bold text-xl hover:bg-white/20 transition border border-white/20"
+            className="w-full bg-white/10 backdrop-blur text-white py-4 rounded-2xl font-bold text-xl hover:bg-white/20 transition-all border-2 border-yellow-500/50 shadow-xl transform hover:scale-105 uppercase tracking-wide"
           >
-            Join Room
+            🎟️ Join a Game
           </button>
         </div>
+
+        {/* Footer credit */}
+        <p className="absolute bottom-6 text-white/30 text-xs">
+          A party game for 3-10 players
+        </p>
       </div>
     );
   }
