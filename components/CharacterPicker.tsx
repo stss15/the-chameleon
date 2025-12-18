@@ -2,23 +2,24 @@ import React from 'react';
 
 // Available characters - each has a FIXED seed so they always look the same
 // Using unique seeds ensures consistent, recognizable characters
+// Styles: notionists (hand-drawn), open-peeps (illustrated), big-ears (cute), thumbs (fun)
 export const CHARACTERS = [
-    { id: 'char1', style: 'adventurer', seed: 'Alex', name: 'Alex' },
-    { id: 'char2', style: 'adventurer', seed: 'Sam', name: 'Sam' },
-    { id: 'char3', style: 'avataaars', seed: 'Chris', name: 'Chris' },
-    { id: 'char4', style: 'avataaars', seed: 'Jordan', name: 'Jordan' },
-    { id: 'char5', style: 'bottts', seed: 'Robo1', name: 'Spark' },
-    { id: 'char6', style: 'bottts', seed: 'Robo2', name: 'Bolt' },
-    { id: 'char7', style: 'pixel-art', seed: 'Pixel1', name: 'Bit' },
-    { id: 'char8', style: 'pixel-art', seed: 'Pixel2', name: 'Byte' },
-    { id: 'char9', style: 'big-smile', seed: 'Happy1', name: 'Joy' },
-    { id: 'char10', style: 'big-smile', seed: 'Happy2', name: 'Bliss' },
-    { id: 'char11', style: 'lorelei', seed: 'Lore1', name: 'Luna' },
-    { id: 'char12', style: 'lorelei', seed: 'Lore2', name: 'Nova' },
-    { id: 'char13', style: 'fun-emoji', seed: 'Emoji1', name: 'Sunny' },
-    { id: 'char14', style: 'fun-emoji', seed: 'Emoji2', name: 'Star' },
-    { id: 'char15', style: 'micah', seed: 'Art1', name: 'Indie' },
-    { id: 'char16', style: 'micah', seed: 'Art2', name: 'Sage' },
+    { id: 'char1', style: 'notionists', seed: 'Felix', name: 'Felix' },
+    { id: 'char2', style: 'notionists', seed: 'Sophie', name: 'Sophie' },
+    { id: 'char3', style: 'notionists', seed: 'Charlie', name: 'Charlie' },
+    { id: 'char4', style: 'notionists', seed: 'Emma', name: 'Emma' },
+    { id: 'char5', style: 'open-peeps', seed: 'Max', name: 'Max' },
+    { id: 'char6', style: 'open-peeps', seed: 'Lily', name: 'Lily' },
+    { id: 'char7', style: 'open-peeps', seed: 'Oscar', name: 'Oscar' },
+    { id: 'char8', style: 'open-peeps', seed: 'Mia', name: 'Mia' },
+    { id: 'char9', style: 'big-ears', seed: 'Jack', name: 'Jack' },
+    { id: 'char10', style: 'big-ears', seed: 'Ruby', name: 'Ruby' },
+    { id: 'char11', style: 'big-ears', seed: 'Harry', name: 'Harry' },
+    { id: 'char12', style: 'big-ears', seed: 'Poppy', name: 'Poppy' },
+    { id: 'char13', style: 'thumbs', seed: 'Leo', name: 'Leo' },
+    { id: 'char14', style: 'thumbs', seed: 'Ivy', name: 'Ivy' },
+    { id: 'char15', style: 'thumbs', seed: 'Alfie', name: 'Alfie' },
+    { id: 'char16', style: 'thumbs', seed: 'Daisy', name: 'Daisy' },
 ];
 
 // Generate avatar URL for a specific character
