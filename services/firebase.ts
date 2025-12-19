@@ -141,11 +141,11 @@ export const startGame = async (roomId: string, topic: TopicCard) => {
   const secretCode = GRID_COORDS[secretIndex];
 
   // 3. Calculate max rounds based on player count
-  // 3-4 players: 1 round, 5-6: 2 rounds, 7+: 3 rounds (capped)
+  // 3-5 players: 1 round, 6-8: 2 rounds, 9 players: 3 rounds
   const playerCount = playerIds.length;
   let maxRounds = 1;
-  if (playerCount >= 5 && playerCount <= 6) maxRounds = 2;
-  else if (playerCount >= 7) maxRounds = 3;
+  if (playerCount >= 6 && playerCount <= 8) maxRounds = 2;
+  else if (playerCount >= 9) maxRounds = 3;
 
   // 4. Set Game State - start with TOPIC_VOTE phase
   updates['phase'] = 'TOPIC_VOTE';
@@ -160,6 +160,9 @@ export const startGame = async (roomId: string, topic: TopicCard) => {
   updates['winner'] = null;
   updates['chameleonGuess'] = null;
   updates['topicVotes'] = null; // Clear any previous votes
+  updates['timerStartedAt'] = null; // Timer will be set when CLUES phase starts
+  updates['clueTimerExpired'] = null; // Reset clue timer tracking
+  updates['overallWinner'] = null; // Reset overall winner tracking
 
   await update(roomRef, updates);
 };
@@ -195,39 +198,78 @@ export const submitTopicVote = async (roomId: string, playerId: string, keepTopi
       // Topic approved - proceed to CLUES phase
       await update(ref(db, `rooms/${roomId}`), {
         phase: 'CLUES',
-        topicVotes: null
+        topicVotes: null,
+        timerStartedAt: Date.now() // Start timer for first player's clue
       });
     }
   }
 };
 
-export const submitClue = async (roomId: string, playerId: string, clue: string, nextTurnIndex: number, isLast: boolean) => {
+export const submitClue = async (roomId: string, playerId: string, clue: string, nextTurnIndex: number, isLast: boolean, wasLate: boolean = false) => {
   if (!db) return;
+
+  // Get current state to check timer and apply penalties
+  const snapshot = await get(ref(db, `rooms/${roomId}`));
+  const state = snapshot.val() as GameState;
+
   const updates: any = {};
   updates[`players/${playerId}/clue`] = clue;
+  updates[`players/${playerId}/clueSubmittedAt`] = Date.now();
+
+  // Apply -1 point penalty if player went over 60 seconds
+  if (wasLate) {
+    const currentScore = state.players[playerId]?.score || 0;
+    updates[`players/${playerId}/score`] = currentScore - 1;
+    updates[`clueTimerExpired/${playerId}`] = true;
+  }
 
   if (isLast) {
-    // After clues, chameleon gets to guess the word first
-    updates['phase'] = 'GUESSING';
+    // After all clues, show recap before voting
+    updates['phase'] = 'CLUES_RECAP';
+    updates['timerStartedAt'] = Date.now(); // Start recap timer
   } else {
     updates['currentTurnIndex'] = nextTurnIndex;
+    updates['timerStartedAt'] = Date.now(); // Reset timer for next player
   }
 
   await update(ref(db, `rooms/${roomId}`), updates);
 };
 
-export const submitVote = async (roomId: string, voterId: string, accusedId: string) => {
+export const submitVote = async (
+  roomId: string,
+  voterId: string,
+  accusedId: string,
+  wasLate: boolean = false,
+  secretWordGuess?: string // Chameleon's secret word guess (only matters if they evade)
+) => {
   if (!db) return;
 
+  // If auto-voting for self due to timeout, apply -2 penalty
+  const updates: any = {};
+
   // 1. Submit the vote
-  await update(ref(db, `rooms/${roomId}/players/${voterId}`), { votedFor: accusedId });
+  updates[`players/${voterId}/votedFor`] = accusedId;
+
+  // Store chameleon's secret word guess (will be used if they evade)
+  if (secretWordGuess) {
+    updates[`players/${voterId}/secretWordGuess`] = secretWordGuess;
+  }
+
+  // Apply -2 penalty if voting for self (either by choice or timeout)
+  if (accusedId === voterId) {
+    const snapshot = await get(ref(db, `rooms/${roomId}/players/${voterId}`));
+    const voter = snapshot.val() as Player;
+    updates[`players/${voterId}/score`] = (voter?.score || 0) - 2;
+  }
+
+  await update(ref(db, `rooms/${roomId}`), updates);
 
   // 2. Get full game state
   const snapshot = await get(ref(db, `rooms/${roomId}`));
   const state = snapshot.val() as GameState;
   const players = state.players;
 
-  // Count active (non-eliminated) players and their votes
+  // Count active (non-eliminated) players and their votes (everyone votes including chameleon)
   const activePlayers = Object.values(players).filter(p => !p.isEliminated);
   const activeVotes = activePlayers.filter(p => p.votedFor).length;
 
@@ -248,135 +290,214 @@ export const submitVote = async (roomId: string, voterId: string, accusedId: str
   // 4. Find who got the most votes (handle ties by picking random)
   const topVotedIds = Object.keys(voteCounts).filter(id => voteCounts[id] === maxVotes);
   const eliminatedId = topVotedIds[Math.floor(Math.random() * topVotedIds.length)];
-  const eliminatedPlayer = players[eliminatedId];
 
   // Find chameleon
   const chameleonId = Object.values(players).find(p => p.role === 'CHAMELEON')?.id || '';
 
-  // 5. Check if chameleon was caught
+  // 5. Calculate vote scores for NON-CHAMELEON players (+2 correct, -2 incorrect)
+  // The chameleon doesn't gain/lose points from voting - they vote to throw others off
+  const scoreUpdates: any = {};
+  const currentRound = state.currentRound || 1;
+
+  activePlayers.forEach(p => {
+    // Skip chameleon - they don't get scored on voting (voting to throw others off)
+    if (p.role === 'CHAMELEON') return;
+
+    // Skip if they voted for themselves (already penalized separately)
+    if (p.votedFor === p.id) return;
+
+    let scoreChange = 0;
+    if (p.votedFor === chameleonId) {
+      scoreChange += 2; // Correctly voted for chameleon
+    } else {
+      scoreChange -= 2; // Incorrectly voted
+    }
+    scoreUpdates[`players/${p.id}/score`] = (players[p.id].score || 0) + scoreChange;
+  });
+
+  // 6. Check if chameleon was caught (most votes)
   if (eliminatedId === chameleonId) {
-    // Chameleon caught! Innocents win (chameleon already had their guess chance)
-    // Calculate scores
-    const scoreUpdates: any = {};
-    Object.keys(players).forEach(pid => {
-      const player = players[pid];
-      let scoreChange = 0;
-
-      if (player.role === 'CHAMELEON') {
-        scoreChange -= 3; // Caught penalty
-      } else {
-        if (player.isEliminated) {
-          scoreChange -= 1; // Was voted out
-        }
-        if (player.votedFor === chameleonId) {
-          scoreChange += 2; // Correctly voted for chameleon
-        }
-      }
-      scoreUpdates[`players/${pid}/score`] = (player.score || 0) + scoreChange;
-    });
-
+    // Chameleon caught! Round ends
     await update(ref(db, `rooms/${roomId}`), {
       ...scoreUpdates,
       phase: 'GAME_OVER',
       winner: 'CITIZENS',
       lastEliminated: eliminatedId
     });
+
+    // Check for overall winner (first to 20)
+    await checkOverallWinner(roomId);
     return;
   }
 
-  // 6. Innocent was eliminated - mark them as eliminated
-  const updates: any = {};
-  updates[`players/${eliminatedId}/isEliminated`] = true;
-  updates['lastEliminated'] = eliminatedId;
+  // 7. Chameleon evaded! Give evasion bonus
+  // Evasion bonus: Round 1 = +2, Round 2 = +3, Round 3 = +5
+  const evasionBonus = currentRound === 1 ? 2 : currentRound === 2 ? 3 : 5;
+  let chameleonFinalScore = (players[chameleonId]?.score || 0) + evasionBonus;
 
-  // 7. Check end conditions
-  const remainingActive = activePlayers.length - 1; // After this elimination
-  const currentRound = state.currentRound || 1;
+  // Check chameleon's secret word guess (submitted during voting)
+  const chameleonGuess = players[chameleonId]?.secretWordGuess || '';
+  const secretWord = state.topic?.words[state.secretWordIndex || 0] || '';
+  const guessCorrect = chameleonGuess.toLowerCase().trim() === secretWord.toLowerCase().trim();
+
+  // +2 bonus for correct word guess
+  if (guessCorrect && chameleonGuess) {
+    chameleonFinalScore += 2;
+  }
+
+  scoreUpdates[`players/${chameleonId}/score`] = chameleonFinalScore;
+  scoreUpdates['chameleonGuess'] = chameleonGuess || '(no guess)';
+
+  // Mark who was eliminated (wrong person)
+  scoreUpdates[`players/${eliminatedId}/isEliminated`] = true;
+  scoreUpdates['lastEliminated'] = eliminatedId;
+
+  // 8. Check if max rounds reached or too few players left
   const maxRounds = state.maxRounds || 1;
+  const remainingActive = activePlayers.length - 1; // After this elimination
 
-  // Chameleon wins if: only 2 players left OR max rounds reached
-  if (remainingActive <= 2 || currentRound >= maxRounds) {
-    // Calculate chameleon winning scores
-    Object.keys(players).forEach(pid => {
-      const player = players[pid];
-      let scoreChange = 0;
-      if (player.role === 'CHAMELEON') {
-        scoreChange += currentRound * 2; // Survival bonus per round
-      } else if (player.isEliminated || eliminatedId === pid) {
-        scoreChange -= 1; // Was voted out
-      }
-      updates[`players/${pid}/score`] = (player.score || 0) + scoreChange;
+  if (currentRound >= maxRounds || remainingActive <= 2) {
+    // Chameleon wins by surviving all rounds - go to GAME_OVER
+    await update(ref(db, `rooms/${roomId}`), {
+      ...scoreUpdates,
+      phase: 'GAME_OVER',
+      winner: 'CHAMELEON'
     });
-
-    updates['phase'] = 'GAME_OVER';
-    updates['winner'] = 'CHAMELEON';
-    await update(ref(db, `rooms/${roomId}`), updates);
-    return;
+  } else {
+    // More rounds to play - show elimination screen then continue
+    await update(ref(db, `rooms/${roomId}`), {
+      ...scoreUpdates,
+      phase: 'ELIMINATION'
+    });
   }
 
-  // 8. Continue to next round - reset votes and clues, update turn order
-  const stillActiveIds = Object.keys(players).filter(
-    pid => pid !== eliminatedId && !players[pid].isEliminated
-  );
+  // Check for overall winner
+  await checkOverallWinner(roomId);
+};
 
-  // Reset votes and clues for all active players
-  stillActiveIds.forEach(pid => {
-    updates[`players/${pid}/votedFor`] = null;
-    updates[`players/${pid}/clue`] = null;
+// Check if any player has reached 20 points (overall game winner)
+export const checkOverallWinner = async (roomId: string) => {
+  if (!db) return;
+
+  const snapshot = await get(ref(db, `rooms/${roomId}`));
+  const state = snapshot.val() as GameState;
+
+  // Find player with 20+ points
+  const winner = Object.values(state.players).find(p => (p.score || 0) >= 20);
+
+  if (winner) {
+    await update(ref(db, `rooms/${roomId}`), {
+      overallWinner: winner.id
+    });
+  }
+};
+
+// Transition from CLUES_RECAP to VOTING phase
+export const startVotingPhase = async (roomId: string) => {
+  if (!db) return;
+  await update(ref(db, `rooms/${roomId}`), {
+    phase: 'VOTING',
+    timerStartedAt: Date.now()
   });
+};
 
-  updates['turnOrder'] = shuffleArray(stillActiveIds);
-  updates['currentTurnIndex'] = 0;
-  updates['currentRound'] = currentRound + 1;
-  updates['phase'] = 'ELIMINATION'; // Brief pause to show who was eliminated
+// Helper to continue after elimination display - start next round
+export const continueAfterElimination = async (roomId: string) => {
+  if (!db) return;
+
+  // Get current state to reset for next round
+  const snapshot = await get(ref(db, `rooms/${roomId}`));
+  const state = snapshot.val() as GameState;
+
+  // Get active players
+  const activePlayers = Object.values(state.players).filter(p => !p.isEliminated);
+  const activeIds = activePlayers.map(p => p.id);
+
+  const updates: any = {
+    phase: 'CLUES',
+    timerStartedAt: Date.now(),
+    currentTurnIndex: 0,
+    currentRound: (state.currentRound || 1) + 1,
+    turnOrder: shuffleArray(activeIds),
+    chameleonGuess: null
+  };
+
+  // Reset clues and votes for active players
+  activeIds.forEach(pid => {
+    updates[`players/${pid}/clue`] = null;
+    updates[`players/${pid}/clueSubmittedAt`] = null;
+    updates[`players/${pid}/votedFor`] = null;
+  });
 
   await update(ref(db, `rooms/${roomId}`), updates);
 };
 
-// Helper to continue after elimination display
-export const continueAfterElimination = async (roomId: string) => {
-  if (!db) return;
-  await update(ref(db, `rooms/${roomId}`), { phase: 'CLUES' });
-};
-
-// Chameleon guesses the word (after clues phase)
-// If correct → Chameleon wins, if wrong → continue to voting
+// Chameleon guesses the secret word (after evading voters)
+// If correct → +2 bonus. Then either continue to next round or end game.
 export const submitChameleonGuess = async (roomId: string, guessWord: string, actualWord: string) => {
   if (!db) return;
 
+  const snapshot = await get(ref(db, `rooms/${roomId}`));
+  const state = snapshot.val() as GameState;
+
   const isCorrect = guessWord.toLowerCase().trim() === actualWord.toLowerCase().trim();
+  const chameleonId = Object.values(state.players).find(p => p.role === 'CHAMELEON')?.id;
 
-  if (isCorrect) {
-    // Chameleon wins by guessing correctly!
-    // Calculate scores at game end
-    const snapshot = await get(ref(db, `rooms/${roomId}`));
-    const state = snapshot.val() as GameState;
+  const updates: any = {
+    chameleonGuess: guessWord
+  };
 
-    const scoreUpdates: any = {};
-    Object.keys(state.players).forEach(pid => {
-      const player = state.players[pid];
-      let scoreChange = 0;
-      if (player.role === 'CHAMELEON') {
-        scoreChange += 5; // Guessed word correctly
-        scoreChange += (state.currentRound - 1) * 2; // +2 per round survived
-      }
-      // Innocents get no points when chameleon guesses correctly
-      scoreUpdates[`players/${pid}/score`] = (player.score || 0) + scoreChange;
-    });
-
-    await update(ref(db, `rooms/${roomId}`), {
-      ...scoreUpdates,
-      phase: 'GAME_OVER',
-      winner: 'CHAMELEON',
-      chameleonGuess: guessWord
-    });
-  } else {
-    // Wrong guess - continue to voting phase
-    await update(ref(db, `rooms/${roomId}`), {
-      chameleonGuess: guessWord,
-      phase: 'VOTING'
-    });
+  // +2 bonus for correct guess
+  if (isCorrect && chameleonId) {
+    const chameleonScore = state.players[chameleonId]?.score || 0;
+    updates[`players/${chameleonId}/score`] = chameleonScore + 2;
   }
+
+  const currentRound = state.currentRound || 1;
+  const maxRounds = state.maxRounds || 1;
+  const activePlayers = Object.values(state.players).filter(p => !p.isEliminated);
+
+  // Check if game should end (max rounds reached or too few players)
+  if (currentRound >= maxRounds || activePlayers.length <= 2) {
+    // Game over - chameleon wins by surviving
+    updates['phase'] = 'GAME_OVER';
+    updates['winner'] = 'CHAMELEON';
+  } else {
+    // More rounds - show elimination result then continue
+    updates['phase'] = 'ELIMINATION';
+  }
+
+  await update(ref(db, `rooms/${roomId}`), updates);
+
+  // Check for overall winner (first to 20)
+  await checkOverallWinner(roomId);
+};
+
+// Chameleon skips guessing (timeout or chooses not to guess)
+export const skipChameleonGuess = async (roomId: string) => {
+  if (!db) return;
+
+  const snapshot = await get(ref(db, `rooms/${roomId}`));
+  const state = snapshot.val() as GameState;
+
+  const currentRound = state.currentRound || 1;
+  const maxRounds = state.maxRounds || 1;
+  const activePlayers = Object.values(state.players).filter(p => !p.isEliminated);
+
+  const updates: any = {
+    chameleonGuess: '(skipped)'
+  };
+
+  // Check if game should end
+  if (currentRound >= maxRounds || activePlayers.length <= 2) {
+    updates['phase'] = 'GAME_OVER';
+    updates['winner'] = 'CHAMELEON';
+  } else {
+    updates['phase'] = 'ELIMINATION';
+  }
+
+  await update(ref(db, `rooms/${roomId}`), updates);
+  await checkOverallWinner(roomId);
 };
 
 // Calculate and apply scores at game end

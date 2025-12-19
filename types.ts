@@ -9,7 +9,9 @@ export interface Player {
   avatarSeed: string; // For generating consistent avatars
   characterStyle: string; // DiceBear style (adventurer, pixel-art, etc.)
   clue?: string;
+  clueSubmittedAt?: number; // Timestamp when clue was submitted
   votedFor?: string; // ID of player they voted for
+  secretWordGuess?: string; // Chameleon's secret word guess (submitted during voting)
   isEliminated?: boolean; // For multi-round elimination
   mediaState?: MediaState; // Camera/mic status for video chat
 }
@@ -39,9 +41,10 @@ export type GamePhase =
   | 'SETUP'
   | 'TOPIC_VOTE'  // New: players vote on whether to keep the topic
   | 'CLUES'
+  | 'CLUES_RECAP' // New: shows all clues before voting
   | 'VOTING'
   | 'ELIMINATION' // New: showing who was eliminated
-  | 'GUESSING' // Chameleon guesses the word
+  | 'GUESSING' // Chameleon guesses the word (only if they evade)
   | 'GAME_OVER'
   | 'ENDED'; // Host ended the session
 
@@ -58,9 +61,12 @@ export interface GameState {
   maxRounds: number; // Based on player count
   lastEliminated?: string; // Player ID of last eliminated player
   winner?: 'CHAMELEON' | 'CITIZENS';
+  overallWinner?: string; // Player ID of first to 20 points
   chameleonGuess?: string;
   messages?: Record<string, ChatMessage>; // Live chat messages
   topicVotes?: Record<string, boolean>; // playerId -> true (keep) or false (skip)
+  timerStartedAt?: number; // Timestamp when current phase timer started
+  clueTimerExpired?: Record<string, boolean>; // Track who went over time
 }
 
 // Chat message for live feed

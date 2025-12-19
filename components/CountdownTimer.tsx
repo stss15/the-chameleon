@@ -67,11 +67,11 @@ export const CountdownTimer: React.FC<CountdownTimerProps> = ({
     };
 
     return (
-        <div className={`flex items-center gap-2 px-3 py-2 rounded-lg font-bold transition-colors ${isExpired ? 'bg-red-500/50 text-red-200' :
-                isWarning ? 'bg-orange-500/50 text-orange-200 animate-pulse' :
-                    'bg-white/10 text-white'
+        <div className={`flex items-center gap-2 px-3 py-2 rounded-lg font-bold transition-colors ${isExpired ? 'bg-red-600 text-white' :
+            isWarning ? 'bg-red-500 text-white animate-pulse shadow-lg shadow-red-500/50' :
+                'bg-white/10 text-white'
             }`}>
-            <span className="text-lg">⏱️</span>
+            <span className="text-lg">{isWarning || isExpired ? '🚨' : '⏱️'}</span>
             {label && <span className="text-xs opacity-70">{label}</span>}
             <span className="text-xl tabular-nums">{formatTime(seconds)}</span>
         </div>

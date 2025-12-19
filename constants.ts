@@ -2,183 +2,273 @@ import { TopicCard } from "./types";
 
 export const DEFAULT_TOPICS: TopicCard[] = [
   {
-    category: "British Sitcoms",
+    category: "Cuisines",
     words: [
-      "Fawlty Towers", "Only Fools", "Blackadder", "The Inbetweeners",
-      "Peep Show", "Father Ted", "Miranda", "Vicar of Dibley",
-      "Gavin & Stacey", "Friday Night Dinner", "Benidorm", "The Royle Family",
-      "Absolutely Fabulous", "Red Dwarf", "Ghosts", "The Office"
+      "Italian", "Chinese", "Mexican", "Indian",
+      "Japanese", "French", "Thai", "Greek",
+      "Turkish", "Spanish", "Lebanese", "Vietnamese",
+      "American", "Ethiopian", "Caribbean", "Moroccan"
     ]
   },
   {
-    category: "Harry Potter Universe",
+    category: "Pizza Toppings",
     words: [
-      "Harry Potter", "Dumbledore", "Snape", "Hagrid",
-      "Voldemort", "Hermione", "Ron Weasley", "Draco Malfoy",
-      "Dobby", "Sirius Black", "Hogwarts", "Quidditch",
-      "The Sorting Hat", "Diagon Alley", "Butterbeer", "Golden Snitch"
+      "Pepperoni", "Pineapple", "Mushroom", "Anchovies",
+      "Jalapeños", "Olives", "Sweetcorn", "Spinach",
+      "Chicken", "Red Onion", "Ham", "Garlic",
+      "Egg", "Beef", "Rocket", "Prawns"
     ]
   },
   {
-    category: "British Bands & Musicians",
+    category: "Herbs & Spices",
     words: [
-      "The Beatles", "Queen", "Oasis", "Spice Girls",
-      "Adele", "David Bowie", "Elton John", "Ed Sheeran",
-      "Coldplay", "Rolling Stones", "Blur", "Amy Winehouse",
-      "Pink Floyd", "Arctic Monkeys", "Take That", "One Direction"
+      "Basil", "Chilli", "Cinnamon", "Ginger",
+      "Rosemary", "Mint", "Oregano", "Cumin",
+      "Turmeric", "Thyme", "Coriander", "Garlic",
+      "Paprika", "Nutmeg", "Saffron", "Parsley"
     ]
   },
   {
-    category: "UK Reality TV",
+    category: "Board Games",
     words: [
-      "Love Island", "Big Brother", "I'm A Celeb", "The Apprentice",
-      "Bake Off", "Gogglebox", "Made in Chelsea", "TOWIE",
-      "Britain's Got Talent", "The X Factor", "Strictly", "The Traitors",
-      "First Dates", "Dinner Date", "Come Dine With Me", "The Chase"
+      "Monopoly", "Chess", "Scrabble", "Cluedo",
+      "Risk", "Catan", "Battleship", "Pictionary",
+      "Uno", "Poker", "Jenga", "Operation",
+      "Snakes & Ladders", "Draughts", "Trivial Pursuit", "Pandemic"
     ]
   },
   {
-    category: "Disney Movies",
+    category: "Mammals",
     words: [
-      "The Lion King", "Frozen", "Aladdin", "Toy Story",
-      "Beauty & Beast", "Little Mermaid", "Mulan", "Moana",
-      "Finding Nemo", "Shrek", "Cinderella", "Snow White",
-      "Jungle Book", "Peter Pan", "101 Dalmatians", "Mary Poppins"
+      "Lion", "Blue Whale", "Fruit Bat", "Human",
+      "African Elephant", "Red Kangaroo", "Platypus", "Grey Wolf",
+      "Bottlenose Dolphin", "Chimpanzee", "Polar Bear", "Cow",
+      "Hedgehog", "Giraffe", "Sloth", "Rhino"
     ]
   },
   {
-    category: "British Biscuits",
+    category: "Natural Disasters",
     words: [
-      "Digestive", "Hobnob", "Jammie Dodger", "Custard Cream",
-      "Bourbon", "Rich Tea", "Penguin", "Party Ring",
-      "Shortbread", "Maryland", "Chocolate Club", "Nice",
-      "Ginger Nut", "Fig Roll", "Pink Wafer", "Garibaldi"
+      "Earthquake", "Volcano", "Tsunami", "Tornado",
+      "Flood", "Wildfire", "Avalanche", "Hurricane",
+      "Drought", "Blizzard", "Landslide", "Heatwave",
+      "Meteor Impact", "Sinkhole", "Hailstorm", "Sandstorm"
     ]
   },
   {
-    category: "British Chocolate",
+    category: "Hobbies",
     words: [
-      "Dairy Milk", "KitKat", "Twirl", "Wispa",
-      "Mars Bar", "Snickers", "Crunchie", "Flake",
-      "Twix", "Bounty", "Toblerone", "Double Decker",
-      "Boost", "Galaxy", "Creme Egg", "Smarties"
+      "Photography", "Gardening", "Cooking", "Fishing",
+      "Hiking", "Painting", "Knitting", "Gaming",
+      "Reading", "Birdwatching", "Yoga", "Woodworking",
+      "Dancing", "Running", "Stamp Collecting", "Pottery"
     ]
   },
   {
-    category: "Condiments & Sauces",
+    category: "Hand Tools",
     words: [
-      "Tomato Ketchup", "Brown Sauce", "Mayonnaise", "Salad Cream",
-      "Marmite", "Branston Pickle", "Piccalilli", "Mint Sauce",
-      "Gravy", "Curry Sauce", "Vinegar", "Mustard",
-      "Tartare Sauce", "Soy Sauce", "BBQ Sauce", "Sweet Chilli"
+      "Hammer", "Saw", "Drill", "Screwdriver",
+      "Tape Measure", "Spanner", "Pliers", "Axe",
+      "Chisel", "Spirit Level", "Sandpaper", "Crowbar",
+      "Mallet", "Wrench", "Staple Gun", "Allen Key"
     ]
   },
   {
-    category: "The Pub",
+    category: "European Countries",
     words: [
-      "Pint of Lager", "Guinness", "Cider", "Gin & Tonic",
-      "Packet of Crisps", "Pork Scratchings", "Peanuts", "Sunday Roast",
-      "Dartboard", "Pool Table", "Jukebox", "Last Orders",
-      "Beer Garden", "The Landlord", "Quiz Night", "Sticky Carpet"
+      "UK", "France", "Germany", "Italy",
+      "Spain", "Greece", "Ireland", "Netherlands",
+      "Sweden", "Poland", "Portugal", "Norway",
+      "Switzerland", "Austria", "Belgium", "Denmark"
     ]
   },
   {
-    category: "UK Fast Food",
+    category: "Landmarks",
     words: [
-      "Greggs", "Nando's", "McDonald's", "KFC",
-      "Burger King", "Domino's", "Pizza Hut", "Subway",
-      "Five Guys", "Wagamama", "Wetherspoons", "The Chippy",
-      "Kebab Shop", "Chinese Takeaway", "Indian Takeaway", "Pizza Express"
+      "Eiffel Tower", "Great Pyramid", "Statue of Liberty", "Great Wall",
+      "Big Ben", "Colosseum", "Taj Mahal", "Grand Canyon",
+      "Stonehenge", "Machu Picchu", "Mount Everest", "Sydney Opera House",
+      "Burj Khalifa", "Mount Fuji", "Hollywood Sign", "Leaning Tower"
     ]
   },
   {
-    category: "British Puddings",
+    category: "Transport",
     words: [
-      "Sticky Toffee", "Apple Crumble", "Trifle", "Victoria Sponge",
-      "Eton Mess", "Baked Alaska", "Spotted Dick", "Christmas Pudding",
-      "Bread & Butter", "Bakewell Tart", "Lemon Drizzle", "Scones",
-      "Cheesecake", "Profiteroles", "Colin (Caterpillar)", "Custard"
+      "Car", "Plane", "Train", "Bicycle",
+      "Boat", "Bus", "Helicopter", "Motorcycle",
+      "Submarine", "Scooter", "Rocket", "Ferry",
+      "Tram", "Lorry", "Hot Air Balloon", "Tractor"
     ]
   },
   {
-    category: "UK Supermarkets",
+    category: "Holiday Types",
     words: [
-      "Tesco", "Sainsbury's", "Asda", "Waitrose",
-      "Morrisons", "Lidl", "Aldi", "Co-op",
-      "M&S Food", "Iceland", "Ocado", "Booths",
-      "Whole Foods", "Costco", "Spar", "Corner Shop"
+      "Beach", "Skiing", "City Break", "Camping",
+      "Cruise", "Safari", "Backpacking", "Spa",
+      "Road Trip", "Hiking", "Festival", "Honeymoon",
+      "Staycation", "Volunteering", "Sailing", "Theme Park"
     ]
   },
   {
-    category: "London Landmarks",
+    category: "Public Buildings",
     words: [
-      "Big Ben", "Tower Bridge", "London Eye", "The Shard",
-      "Buckingham Palace", "The Tube", "Oxford Street", "Trafalgar Sq",
-      "Piccadilly Circus", "Hyde Park", "Wembley", "Wimbledon",
-      "The Gherkin", "River Thames", "Natural History", "Harrods"
+      "Library", "Hospital", "Cinema", "School",
+      "Museum", "Church", "Police Station", "Post Office",
+      "Courthouse", "Art Gallery", "Town Hall", "Leisure Centre",
+      "University", "Cathedral", "Prison", "Fire Station"
     ]
   },
   {
-    category: "UK High Street",
+    category: "Ways to Cook",
     words: [
-      "Primark", "Boots", "WHSmith", "Poundland",
-      "Next", "H&M", "Waterstones", "Currys",
-      "Argos", "Superdrug", "JD Sports", "Sports Direct",
-      "Zara", "Clarks", "TK Maxx", "Charity Shop"
+      "Frying", "Boiling", "Steaming", "Roasting",
+      "Grilling", "Baking", "Poaching", "Sautéing",
+      "Blanching", "Stewing", "Smoking", "Braising",
+      "Deep-frying", "Toasting", "Microwaving", "Pickling"
     ]
   },
   {
-    category: "School Days",
+    category: "Insects",
     words: [
-      "Assembly", "Detention", "PE Kit", "Packed Lunch",
-      "Homework", "Uniform", "Headteacher", "Break Time",
-      "Sports Day", "School Bus", "Exam Hall", "Whiteboard",
-      "Register", "Playground", "School Trip", "Tuck Shop"
+      "Ant", "Bee", "Butterfly", "Spider",
+      "Scorpion", "Mosquito", "Beetle", "Grasshopper",
+      "Wasp", "Moth", "Dragon Fly", "Cockroach",
+      "Ladybird", "Tick", "Centipede", "Snail"
     ]
   },
   {
-    category: "Household Objects",
+    category: "Types of Party",
     words: [
-      "Kettle", "Toaster", "Washing Machine", "Microwave",
-      "Television", "Sofa", "Duvet", "Pillow",
-      "Henry Hoover", "Ironing Board", "Mug", "Teaspoon",
-      "Remote Control", "Laptop", "Fridge", "Toilet Roll"
+      "Birthday", "Wedding", "Funeral", "Christening",
+      "Housewarming", "Stag Do", "Hen Do", "Retirement",
+      "Graduation", "Baby Shower", "Dinner Party", "Masquerade",
+      "Surprise Party", "Office Party", "New Year's", "Wake"
     ]
   },
   {
-    category: "Transportation",
+    category: "Soft Drinks",
     words: [
-      "Double Decker", "Black Cab", "Train", "Tube",
-      "Tram", "Ferry", "Aeroplane", "Helicopter",
-      "Bicycle", "Motorbike", "Scooter", "Skateboard",
-      "Van", "Lorry", "Tractor", "Police Car"
+      "Cola", "Lemonade", "Ginger Beer", "Tonic Water",
+      "Squash", "Orange Juice", "Milk", "Vimto",
+      "Iced Tea", "Dandelion & Burdock", "Energy Drink", "Cream Soda",
+      "Apple Juice", "Tomato Juice", "Irn-Bru", "Ribena"
     ]
   },
   {
-    category: "Animals",
+    category: "Condiments",
     words: [
-      "Lion", "Tiger", "Elephant", "Giraffe",
-      "Monkey", "Penguin", "Polar Bear", "Kangaroo",
-      "Dog", "Cat", "Rabbit", "Hamster",
-      "Cow", "Sheep", "Pig", "Chicken"
+      "Ketchup", "Mayonnaise", "Mustard", "Soy Sauce",
+      "Brown Sauce", "Sriracha", "Tartare Sauce", "BBQ Sauce",
+      "Salad Cream", "Pesto", "Mint Sauce", "Horseradish",
+      "Mango Chutney", "Marmite", "Honey", "Vinegar"
     ]
   },
   {
-    category: "Occupations",
+    category: "Movie Genres",
     words: [
-      "Doctor", "Teacher", "Police Officer", "Firefighter",
-      "Chef", "Farmer", "Builder", "Plumber",
-      "Hairdresser", "Bus Driver", "Pilot", "Astronaut",
-      "Dentist", "Vet", "Artist", "Singer"
+      "Horror", "Sci-Fi", "Rom-Com", "Western",
+      "Documentary", "Action", "Musical", "Thriller",
+      "Animation", "Fantasy", "War", "Slasher",
+      "Comedy", "Period Drama", "Superhero", "Mystery"
     ]
   },
   {
-    category: "Sports",
+    category: "Musical Instruments",
     words: [
-      "Football", "Rugby", "Tennis", "Cricket",
-      "Golf", "Snooker", "Darts", "Boxing",
-      "Athletics", "Formula 1", "Swimming", "Cycling",
-      "Basketball", "Gymnastics", "Netball", "Badminton"
+      "Piano", "Acoustic Guitar", "Drums", "Violin",
+      "Saxophone", "Trumpet", "Flute", "Harp",
+      "Electric Guitar", "Harmonica", "Cello", "Ukulele",
+      "Accordion", "Bagpipes", "Banjo", "Clarinet"
+    ]
+  },
+  {
+    category: "The Human Body",
+    words: [
+      "Heart", "Brain", "Lungs", "Liver",
+      "Stomach", "Skeleton", "Skin", "Eyes",
+      "Teeth", "Muscles", "Blood", "Kidneys",
+      "Intestines", "Ears", "Tongue", "Throat"
+    ]
+  },
+  {
+    category: "Clothing",
+    words: [
+      "Suit", "Ballgown", "Tracksuit", "Uniform",
+      "Pyjamas", "Swimsuit", "Tuxedo", "Dungarees",
+      "Raincoat", "Trench Coat", "Wet Suit", "Wedding Dress",
+      "Spacesuit", "Lab Coat", "Poncho", "Cloak"
+    ]
+  },
+  {
+    category: "Measurements",
+    words: [
+      "Metre", "Kilogram", "Litre", "Hour",
+      "Degree", "Volt", "Watt", "Mile",
+      "Ounce", "Gallon", "Second", "Inch",
+      "Tonne", "Stone", "Pint", "Calorie"
+    ]
+  },
+  {
+    category: "Crimes",
+    words: [
+      "Murder", "Arson", "Kidnapping", "Shoplifting",
+      "Fraud", "Burglary", "Smuggling", "Bribery",
+      "Treason", "Vandalism", "Fly-tipping", "Forgery",
+      "Hijacking", "Extortion", "Perjury", "Loitering"
+    ]
+  },
+  {
+    category: "Reasons for a Breakup",
+    words: [
+      "Cheating", "Boring in Bed", "Bad Breath", "Lazy",
+      "Too Needy", "Still lives with Mum", "Hates Dogs", "Cheapskate",
+      "Ghosting", "Obsessed with Work", "Bad Hygiene", "Secret Second Family",
+      "No Ambition", "Different Politics", "Snoring", "Joined a Cult"
+    ]
+  },
+  {
+    category: "Ways to Hide a Body",
+    words: [
+      "Acid Bath", "Woodchipper", "Buried Deep", "Bottom of the Lake",
+      "Pig Farm", "Concrete Foundation", "Meat Grinder", "Inside a Meat Pie",
+      "Taxidermy", "Suitcase", "Septic Tank", "Chimney",
+      "Library Basement", "Under the Floorboards", "Alligator Swamp", "Cremation"
+    ]
+  },
+  {
+    category: "Things Found in a Pub",
+    words: [
+      "Beer Mats", "Sticky Carpet", "Pork Scratchings", "Dartboard",
+      "Fruit Machine", "Grumpy Local", "Overpriced Gin", "Quiz Night",
+      "Pub Dog", "Stained Glass", "Fireplace", "Pint Glass",
+      "Jukebox", "Bar Stool", "Smoking Area", "Chalkboard"
+    ]
+  },
+  {
+    category: "Ways to Die in the Middle Ages",
+    words: [
+      "Black Death", "Beheading", "Scurvy", "Jousting Accident",
+      "Witch Trial", "Dysentery", "Starvation", "Crushed by a Horse",
+      "Viking Raid", "Arrow to the Eye", "Gangrene", "Burning at the Stake",
+      "Bad Water", "Childbirth", "Boiled in Oil", "Stoning"
+    ]
+  },
+  {
+    category: "British Stereotypes",
+    words: [
+      "Drinking Tea", "Queuing", "Weather Talk", "Saying Sorry",
+      "Stiff Upper Lip", "Fish & Chips", "Sarcasm", "Sunburn on Holiday",
+      "Property Obsession", "Pub Culture", "The Monarchy", "Sunday Roast",
+      "Tutting", "Dunking Biscuits", "Full English", "Irony"
+    ]
+  },
+  {
+    category: "Common Phobias",
+    words: [
+      "Spiders", "Heights", "Flying", "Needles",
+      "Snakes", "Clowns", "Enclosed Spaces", "Darkness",
+      "Blood", "Germs", "Public Speaking", "Birds",
+      "Dogs", "Thunder", "Death", "Water"
     ]
   }
 ];
