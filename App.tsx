@@ -967,6 +967,12 @@ const App: React.FC = () => {
                 setSelectedWordGuess(null);
               };
 
+              // Auto-vote for self when timer expires
+              if (remainingSeconds <= 0 && !currentPlayer.votedFor) {
+                // Trigger auto-vote for self with penalty
+                submitVote(roomCode, playerId, playerId, true, undefined);
+              }
+
               return (
                 <div className="space-y-4">
                   <div className="bg-red-900/60 p-4 rounded-xl border border-red-500/30">
@@ -1089,7 +1095,7 @@ const App: React.FC = () => {
 
             {/* GUESSING phase removed - chameleon now guesses during VOTING */}
 
-            {/* GAME OVER */}
+            {/* GAME OVER - Full screen parchment overlay */}
             {gameState.phase === 'GAME_OVER' && (() => {
               const sortedPlayers = Object.values(gameState.players)
                 .sort((a: Player, b: Player) => (b.score || 0) - (a.score || 0)) as Player[];
@@ -1098,81 +1104,121 @@ const App: React.FC = () => {
               const overallWinner = hasOverallWinner
                 ? (gameState.overallWinner ? gameState.players[gameState.overallWinner] : leader)
                 : null;
+              const chameleonPlayer = (Object.values(gameState.players) as Player[]).find(p => p.role === 'CHAMELEON');
+              const secretWord = gameState.topic?.words[gameState.secretWordIndex!] || '???';
+              const chameleonGuessedCorrect = gameState.chameleonGuess?.toLowerCase().trim() === secretWord.toLowerCase().trim();
 
               return (
-                <div className={`p-6 rounded-xl text-center ${hasOverallWinner ? 'bg-gradient-to-b from-yellow-400 to-amber-500' : 'bg-gold'}`}>
-                  {/* Overall Game Winner */}
-                  {hasOverallWinner && overallWinner ? (
-                    <>
-                      <div className="text-6xl mb-2">🏆</div>
-                      <h2 className="text-3xl font-black text-feltDark mb-2">
-                        {overallWinner.name} WINS THE GAME!
-                      </h2>
-                      <p className="text-feltDark font-medium mb-4">
-                        First to reach 20 points!
-                      </p>
-                    </>
-                  ) : (
-                    <>
-                      <h2 className="text-3xl font-black text-feltDark mb-2">
-                        {gameState.winner === 'CHAMELEON' ? '🦎 CHAMELEON EVADED!' : '👮 CHAMELEON CAUGHT!'}
-                      </h2>
-                      <p className="text-feltDark font-medium mb-2">
-                        The word was: <strong>{gameState.topic.words[gameState.secretWordIndex!]}</strong>
-                      </p>
-                      {gameState.chameleonGuess && gameState.chameleonGuess !== '(skipped)' && (
-                        <p className="text-feltDark/70 text-sm mb-2">
-                          Chameleon guessed: {gameState.chameleonGuess}
-                          {gameState.chameleonGuess.toLowerCase() === gameState.topic.words[gameState.secretWordIndex!].toLowerCase()
-                            ? ' ✓ (+2 bonus!)'
-                            : ' ✗'}
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 animate-fade-in">
+                  <div className="w-full max-w-lg mx-4 bg-gradient-to-b from-parchment to-parchmentDark rounded-2xl shadow-2xl p-6 animate-slide-in-left border-4 border-brass">
+                    {/* Header - Round Result */}
+                    {hasOverallWinner && overallWinner ? (
+                      <div className="text-center mb-6">
+                        <div className="text-6xl mb-3">🏆</div>
+                        <h2 className="text-3xl font-black text-loungeDark">
+                          {overallWinner.name} WINS!
+                        </h2>
+                        <p className="text-loungeDark/70 font-medium">
+                          First to reach 20 points!
                         </p>
-                      )}
-                    </>
-                  )}
+                      </div>
+                    ) : (
+                      <div className="text-center mb-6">
+                        <div className="text-6xl mb-3">
+                          {gameState.winner === 'CHAMELEON' ? '🦎' : '👮'}
+                        </div>
+                        <h2 className="text-2xl font-black text-loungeDark">
+                          {gameState.winner === 'CHAMELEON' ? 'CHAMELEON EVADED!' : 'CHAMELEON CAUGHT!'}
+                        </h2>
+                        <p className="text-loungeDark/60 text-sm mt-1">
+                          Round {gameState.currentRound} of {gameState.maxRounds}
+                        </p>
+                      </div>
+                    )}
 
-                  {/* Scoreboard */}
-                  <div className="bg-feltDark/10 rounded-lg p-3 mb-4">
-                    <h4 className="text-feltDark font-bold text-sm mb-2">
-                      📊 SCORES {!hasOverallWinner && `(First to 20 wins!)`}
-                    </h4>
-                    <div className="space-y-1">
-                      {sortedPlayers.map((p: Player, idx: number) => (
-                        <div key={p.id} className={`flex justify-between items-center text-feltDark text-sm ${idx === 0 ? 'font-bold' : ''}`}>
-                          <span className={`${p.role === 'CHAMELEON' ? 'font-bold' : ''} ${p.isEliminated ? 'line-through opacity-50' : ''}`}>
-                            {idx === 0 && !hasOverallWinner && '👑 '}
-                            {p.name} {p.role === 'CHAMELEON' && '🦎'}
-                          </span>
-                          <div className="flex items-center gap-2">
-                            <span className="font-bold">{p.score || 0} pts</span>
-                            {!hasOverallWinner && (
-                              <div className="w-16 h-2 bg-feltDark/20 rounded-full overflow-hidden">
-                                <div
-                                  className="h-full bg-green-600 transition-all"
-                                  style={{ width: `${Math.min(100, ((p.score || 0) / 20) * 100)}%` }}
+                    {/* Secret Word Reveal */}
+                    {!hasOverallWinner && (
+                      <div className="bg-loungeDark/10 rounded-xl p-4 mb-4 text-center">
+                        <p className="text-xs text-loungeDark/60 uppercase tracking-wider mb-1">The Secret Word Was</p>
+                        <p className="text-3xl font-black text-loungeDark">{secretWord}</p>
+
+                        {/* Chameleon Info */}
+                        <div className="mt-3 pt-3 border-t border-loungeDark/20">
+                          <p className="text-xs text-loungeDark/60 mb-1">The Chameleon was</p>
+                          <div className="flex items-center justify-center gap-2">
+                            {chameleonPlayer && (
+                              <>
+                                <img
+                                  src={getAvatarUrl(chameleonPlayer.avatarSeed, chameleonPlayer.characterStyle)}
+                                  className="w-8 h-8 rounded-full border-2 border-brass bg-white"
                                 />
-                              </div>
+                                <span className="text-lg font-bold text-loungeDark">{chameleonPlayer.name}</span>
+                              </>
                             )}
                           </div>
+
+                          {/* Chameleon's Guess */}
+                          {gameState.chameleonGuess && gameState.chameleonGuess !== '(no guess)' && (
+                            <p className={`text-sm mt-2 ${chameleonGuessedCorrect ? 'text-green-700' : 'text-red-700'}`}>
+                              Guessed: "{gameState.chameleonGuess}"
+                              {chameleonGuessedCorrect ? ' ✓ +2 bonus!' : ' ✗ Wrong!'}
+                            </p>
+                          )}
                         </div>
-                      ))}
+                      </div>
+                    )}
+
+                    {/* Scoreboard */}
+                    <div className="bg-loungeDark/10 rounded-xl p-4 mb-4">
+                      <h4 className="text-loungeDark font-bold text-sm mb-3 text-center">
+                        📊 SCOREBOARD {!hasOverallWinner && <span className="font-normal text-loungeDark/60">(First to 20 wins)</span>}
+                      </h4>
+                      <div className="space-y-2">
+                        {sortedPlayers.map((p: Player, idx: number) => (
+                          <div key={p.id} className={`flex justify-between items-center ${idx === 0 ? '' : ''}`}>
+                            <div className="flex items-center gap-2">
+                              <img
+                                src={getAvatarUrl(p.avatarSeed, p.characterStyle)}
+                                className={`w-6 h-6 rounded-full border border-brass bg-white ${p.isEliminated ? 'opacity-50 grayscale' : ''}`}
+                              />
+                              <span className={`text-sm text-loungeDark ${p.isEliminated ? 'line-through opacity-50' : ''} ${idx === 0 ? 'font-bold' : ''}`}>
+                                {idx === 0 && !hasOverallWinner && '👑 '}
+                                {p.name}
+                                {p.role === 'CHAMELEON' && ' 🦎'}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-bold text-loungeDark">{p.score || 0}</span>
+                              {!hasOverallWinner && (
+                                <div className="w-12 h-2 bg-loungeDark/20 rounded-full overflow-hidden">
+                                  <div
+                                    className="h-full bg-brass transition-all"
+                                    style={{ width: `${Math.min(100, ((p.score || 0) / 20) * 100)}%` }}
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Action Button */}
+                    <div className="text-center">
+                      {currentIsHost ? (
+                        <button
+                          onClick={() => resetGame(roomCode)}
+                          className="bg-gradient-to-b from-loungeDark to-lounge text-parchment px-8 py-3 rounded-full font-bold active:scale-95 transition shadow-lg border-2 border-brass"
+                        >
+                          {hasOverallWinner ? '🎮 New Game' : '➡️ Next Round'}
+                        </button>
+                      ) : (
+                        <p className="text-loungeDark/60 text-sm animate-pulse">
+                          Waiting for host to {hasOverallWinner ? 'start new game' : 'continue'}...
+                        </p>
+                      )}
                     </div>
                   </div>
-
-                  {currentIsHost && (
-                    <button
-                      onClick={() => resetGame(roomCode)}
-                      className="bg-feltDark text-white px-8 py-3 rounded-full font-bold active:scale-95 transition"
-                    >
-                      {hasOverallWinner ? 'New Game' : 'Next Round'}
-                    </button>
-                  )}
-
-                  {!currentIsHost && (
-                    <p className="text-feltDark/70 text-sm animate-pulse">
-                      Waiting for host to {hasOverallWinner ? 'start new game' : 'continue'}...
-                    </p>
-                  )}
                 </div>
               );
             })()}
