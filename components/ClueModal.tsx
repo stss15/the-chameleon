@@ -99,12 +99,18 @@ export const ClueModal: React.FC<ClueModalProps> = ({
                         </div>
                     )}
 
-                    {/* Countdown for your turn */}
+                    {/* Countdown for your turn - PROMINENT */}
                     {isMyTurnNext && countdown !== null && (
                         <div className="mt-8">
-                            <div className="inline-flex items-center gap-2 bg-gold text-feltDark px-6 py-3 rounded-full font-bold">
-                                <span>Your turn in</span>
-                                <span className="text-2xl">{countdown}</span>
+                            <div className="flex flex-col items-center">
+                                <p className="text-white/70 text-sm mb-2">Get ready!</p>
+                                <div
+                                    key={countdown}
+                                    className="w-24 h-24 rounded-full bg-gold flex items-center justify-center animate-bounce-in shadow-2xl shadow-gold/50"
+                                >
+                                    <span className="text-5xl font-black text-loungeDark">{countdown}</span>
+                                </div>
+                                <p className="text-gold font-bold mt-3 text-lg">Your turn is starting...</p>
                             </div>
                         </div>
                     )}

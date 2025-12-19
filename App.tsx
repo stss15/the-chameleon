@@ -987,79 +987,94 @@ const App: React.FC = () => {
                     </div>
 
                     <h3 className="text-center text-lg font-bold mb-2">🔍 WHO IS THE CHAMELEON?</h3>
-                    <p className="text-center text-xs text-white/50 mb-4">
-                      +2 pts correct vote • -2 pts incorrect vote • Everyone votes!
-                    </p>
 
-                    <p className="text-center text-sm text-white/70 mb-3">
-                      Votes: {voteCount} / {activePlayers.length}
-                    </p>
+                    {/* Show different UI for eliminated players (spectators) */}
+                    {currentPlayer.isEliminated ? (
+                      <div className="text-center py-6">
+                        <div className="text-4xl mb-3">👁️</div>
+                        <p className="text-white/70 mb-2">You are watching this round</p>
+                        <p className="text-white/50 text-sm">You were eliminated and cannot vote</p>
+                        <p className="text-sm text-white/70 mt-4">
+                          Votes: {voteCount} / {activePlayers.length}
+                        </p>
+                      </div>
+                    ) : (
+                      <>
+                        <p className="text-center text-xs text-white/50 mb-4">
+                          +2 pts correct vote • -2 pts incorrect vote • Everyone votes!
+                        </p>
 
-                    {!currentPlayer.votedFor ? (
-                      <div className="space-y-4">
-                        {/* Vote Selection */}
-                        <div className="space-y-2">
-                          <p className="text-xs text-white/60 text-center mb-2">Select who you think is the chameleon:</p>
-                          {activePlayers.map((p: Player) => (
-                            <button
-                              key={p.id}
-                              onClick={() => setSelectedVote(p.id)}
-                              className={`w-full p-3 rounded-lg flex items-center gap-3 transition ${selectedVote === p.id
-                                ? 'bg-red-600 border-2 border-white'
-                                : p.id === playerId
-                                  ? 'bg-gray-700/50 border border-dashed border-white/30'
-                                  : 'bg-white/10 hover:bg-white/20'
-                                }`}
-                            >
-                              <img src={getAvatarUrl(p.avatarSeed, p.characterStyle)} className="w-8 h-8 rounded-full bg-white" />
-                              <span className="font-bold flex-1 text-left">{p.name}</span>
-                              {selectedVote === p.id && <span className="text-lg">✓</span>}
-                            </button>
-                          ))}
-                        </div>
+                        <p className="text-center text-sm text-white/70 mb-3">
+                          Votes: {voteCount} / {activePlayers.length}
+                        </p>
 
-                        {/* Chameleon's Secret Word Guess - Only visible to chameleon */}
-                        {isChameleon && (
-                          <div className="bg-purple-900/60 p-4 rounded-xl border border-purple-500/30 mt-4">
-                            <h4 className="text-sm font-bold text-center mb-2">🦎 Your Secret Guess</h4>
-                            <p className="text-xs text-center text-white/50 mb-3">
-                              Also guess the secret word (+2 pts if you evade & guess correctly)
-                            </p>
-                            <div className="grid grid-cols-4 gap-2">
-                              {gameState.topic?.words.map((word) => (
+                        {!currentPlayer.votedFor ? (
+                          <div className="space-y-4">
+                            {/* Vote Selection */}
+                            <div className="space-y-2">
+                              <p className="text-xs text-white/60 text-center mb-2">Select who you think is the chameleon:</p>
+                              {activePlayers.map((p: Player) => (
                                 <button
-                                  key={word}
-                                  onClick={() => setSelectedWordGuess(word)}
-                                  className={`p-2 rounded text-xs font-bold transition ${selectedWordGuess === word
-                                    ? 'bg-purple-600 border-2 border-white'
-                                    : 'bg-white/10 hover:bg-purple-500'
+                                  key={p.id}
+                                  onClick={() => setSelectedVote(p.id)}
+                                  className={`w-full p-3 rounded-lg flex items-center gap-3 transition ${selectedVote === p.id
+                                    ? 'bg-red-600 border-2 border-white'
+                                    : p.id === playerId
+                                      ? 'bg-gray-700/50 border border-dashed border-white/30'
+                                      : 'bg-white/10 hover:bg-white/20'
                                     }`}
                                 >
-                                  {word}
+                                  <img src={getAvatarUrl(p.avatarSeed, p.characterStyle)} className="w-8 h-8 rounded-full bg-white" />
+                                  <span className="font-bold flex-1 text-left">{p.name}</span>
+                                  {selectedVote === p.id && <span className="text-lg">✓</span>}
                                 </button>
                               ))}
                             </div>
-                          </div>
-                        )}
 
-                        {/* Submit Button */}
-                        <button
-                          onClick={handleSubmitVote}
-                          disabled={!canSubmit}
-                          className={`w-full py-4 rounded-xl font-bold text-lg transition shadow-lg ${canSubmit
-                            ? 'bg-gradient-to-b from-gold to-brass text-loungeDark border-2 border-yellow-300/50 active:scale-95 hover:shadow-xl hover:shadow-gold/30'
-                            : 'bg-gray-700 text-gray-400 cursor-not-allowed border border-gray-600'
-                            }`}
-                        >
-                          {!selectedVote
-                            ? '👆 Select a player to vote'
-                            : isChameleon && !selectedWordGuess
-                              ? '🦎 Also select your word guess'
-                              : '🗳️ Submit Vote'}
-                        </button>
-                      </div>
-                    ) : (
-                      <p className="text-center text-white/60">✓ Vote submitted. Waiting for others...</p>
+                            {/* Chameleon's Secret Word Guess - Only visible to chameleon */}
+                            {isChameleon && (
+                              <div className="bg-purple-900/60 p-4 rounded-xl border border-purple-500/30 mt-4">
+                                <h4 className="text-sm font-bold text-center mb-2">🦎 Your Secret Guess</h4>
+                                <p className="text-xs text-center text-white/50 mb-3">
+                                  Also guess the secret word (+2 pts if you evade & guess correctly)
+                                </p>
+                                <div className="grid grid-cols-4 gap-2">
+                                  {gameState.topic?.words.map((word) => (
+                                    <button
+                                      key={word}
+                                      onClick={() => setSelectedWordGuess(word)}
+                                      className={`p-2 rounded text-xs font-bold transition ${selectedWordGuess === word
+                                        ? 'bg-purple-600 border-2 border-white'
+                                        : 'bg-white/10 hover:bg-purple-500'
+                                        }`}
+                                    >
+                                      {word}
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Submit Button */}
+                            <button
+                              onClick={handleSubmitVote}
+                              disabled={!canSubmit}
+                              className={`w-full py-4 rounded-xl font-bold text-lg transition shadow-lg ${canSubmit
+                                ? 'bg-gradient-to-b from-gold to-brass text-loungeDark border-2 border-yellow-300/50 active:scale-95 hover:shadow-xl hover:shadow-gold/30'
+                                : 'bg-gray-700 text-gray-400 cursor-not-allowed border border-gray-600'
+                                }`}
+                            >
+                              {!selectedVote
+                                ? '👆 Select a player to vote'
+                                : isChameleon && !selectedWordGuess
+                                  ? '🦎 Also select your word guess'
+                                  : '🗳️ Submit Vote'}
+                            </button>
+                          </div>
+                        ) : (
+                          <p className="text-center text-white/60">✓ Vote submitted. Waiting for others...</p>
+                        )}
+                      </>
                     )}
                   </div>
                 </div>
@@ -1223,18 +1238,21 @@ const App: React.FC = () => {
               );
             })()}
           </div>
-        )}
+        )
+        }
       </main>
 
       {/* Bottom-Anchored Clue Input - Your Turn */}
       {gameState.phase === 'CLUES' && isMyTurn && (() => {
         const timerStarted = gameState.timerStartedAt || Date.now();
         const elapsedSeconds = Math.floor((currentTime - timerStarted) / 1000);
-        const remainingSeconds = Math.max(0, 60 - elapsedSeconds);
-        const isPenaltyTime = elapsedSeconds > 60;
+        // Give 63 seconds total: 3 for modal countdown + 60 for typing
+        const remainingSeconds = Math.max(0, 63 - elapsedSeconds);
+        // Only show penalty after the full 63 seconds (modal + typing time)
+        const isPenaltyTime = elapsedSeconds > 63;
 
-        // Mark timer as expired when we go over 60 seconds
-        if (elapsedSeconds > 60 && !clueTimerExpired) {
+        // Mark timer as expired when we go over 63 seconds
+        if (elapsedSeconds > 63 && !clueTimerExpired) {
           setClueTimerExpired(true);
         }
 
